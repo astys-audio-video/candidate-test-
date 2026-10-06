@@ -4,9 +4,10 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Astys Accounts Assessment</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#fff;color:#172331;font-family:Arial,Helvetica,sans-serif}
-header{border-bottom:1px solid #e4e9ee;padding:18px 20px;background:#fff;position:sticky;top:0;z-index:5}
-.head{max-width:900px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:20px}
+*{box-sizing:border-box}img{max-width:100%;height:auto}body{margin:0;background:#fff;color:#172331;font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+header{border-bottom:1px solid #e4e9ee;padding:16px 20px;background:#fff;position:sticky;top:0;z-index:5}
+.head{max-width:900px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.header-logo{height:42px;max-height:42px;width:auto;max-width:100%;object-fit:contain;display:block}
 .logo{font-size:28px;font-weight:800;color:#102b49}.logo small{display:block;font-size:10px;letter-spacing:1.5px;color:#758393}
 .company{font-size:12px;color:#758393;text-align:right;line-height:1.4}.wrap{max-width:860px;margin:28px auto;padding:0 16px 40px}
 .intro{border:1px solid #e0e6eb;border-radius:14px;padding:22px;margin-bottom:18px}.intro h1{margin:0 0 6px;color:#102b49;font-size:25px}.intro p{margin:0;color:#6a7784;line-height:1.5}
@@ -14,8 +15,8 @@ header{border-bottom:1px solid #e4e9ee;padding:18px 20px;background:#fff;positio
 .progress{height:7px;background:#edf1f4;border-radius:20px;margin:0 0 18px;overflow:hidden}#bar{height:100%;width:5%;background:#102b49;transition:.2s}
 .qcard{display:none;border:1px solid #dde4ea;border-radius:14px;padding:25px;background:#fff;box-shadow:0 8px 24px rgba(20,40,60,.05)}.qcard.active{display:block}
 .toprow{display:flex;justify-content:space-between;gap:12px;color:#6e7a86;font-size:12px;font-weight:700;margin-bottom:18px}.cat{background:#f3f6f8;padding:5px 9px;border-radius:18px;color:#173b63}
-.question{font-size:20px;font-weight:700;line-height:1.45;margin-bottom:18px}.options{display:grid;gap:10px}
-.option{width:100%;text-align:left;border:1px solid #dce3e8;background:#fff;border-radius:9px;padding:14px 15px;display:flex;gap:11px;font-size:14px;font-weight:600;color:#172331;cursor:pointer}
+.question{font-size:20px;font-weight:700;line-height:1.45;margin-bottom:18px;word-wrap:break-word}.options{display:grid;gap:10px}
+.option{width:100%;text-align:left;border:1px solid #dce3e8;background:#fff;border-radius:9px;padding:14px 15px;display:flex;gap:11px;font-size:14px;font-weight:600;color:#172331;cursor:pointer;word-break:break-word}
 .option:hover{background:#fafcfd}.option:disabled{cursor:default;opacity:1}.letter{width:25px;height:25px;border-radius:50%;background:#f2f5f7;display:inline-flex;align-items:center;justify-content:center;flex:0 0 25px;font-size:12px}
 .correct{background:#edf9f2!important;border-color:#19864b!important;color:#12693b!important}.wrong{background:#fff1f1!important;border-color:#c94444!important;color:#9d3131!important}
 .feedback{display:none;margin-top:15px;padding:13px 14px;border-radius:8px;font-size:14px;line-height:1.45}.feedback.show{display:block}.feedback.good{background:#edf9f2;color:#146a3d}.feedback.bad{background:#fff1f1;color:#8d3030}
@@ -37,10 +38,27 @@ header{border-bottom:1px solid #e4e9ee;padding:18px 20px;background:#fff;positio
 .sync-status.saving{background:#eef4f9;color:#102b49;border:1px solid #b8d1e5}
 .sync-status.success{background:#edf9f2;color:#12693b;border:1px solid #19864b}
 .sync-status.error{background:#fff1f1;color:#9d3131;border:1px solid #c94444}
-@media(max-width:600px){.rulebar{grid-template-columns:1fr 1fr}.company{font-size:10px}.question{font-size:18px}.qcard{padding:20px}}
+.nav-btn{color:#102b49;text-decoration:none;font-size:12px;font-weight:700;padding:6px 12px;border-radius:6px;border:1px solid #cbd5e1;background:#f8fafc;white-space:nowrap}
+.nav-btn:hover{background:#102b49;color:#fff}
+@media(max-width:600px){
+  header{padding:12px 16px}
+  .head{flex-direction:row;justify-content:space-between;align-items:center;gap:10px}
+  .header-logo{height:34px;max-height:34px}
+  .nav-btn{padding:5px 8px;font-size:11px}
+  .wrap{padding:0 12px 30px;margin:16px auto}
+  .intro{padding:16px}
+  .intro h1{font-size:20px}
+  .intro p{font-size:13px}
+  .rulebar{grid-template-columns:1fr 1fr;gap:6px}
+  .company{font-size:10px}
+  .question{font-size:17px;line-height:1.4}
+  .qcard{padding:18px}
+  .option{padding:12px;font-size:13px}
+  .form-card{padding:18px}
+}
 </style></head>
 <body>
-<header><div class="head"><div class="logo">Astys<small>ADD SOUL TO YOUR SPACE</small></div><div class="company">Astys Audio Video Pvt. Ltd.<br>Accounts & Operations Assessment</div></div></header>
+<header><div class="head"><a href="index.html"><img src="img/Astys Logo.PNG" alt="Astys Logo" class="header-logo"></a><div style="display:flex;gap:10px;"><a href="index.html" class="nav-btn">Exams Portal</a><a href="hr_panel.html" class="nav-btn">📊 HR Panel</a></div></div></header>
 <div class="wrap">
 <div class="intro"><h1>Accounts & Operations Executive Assessment</h1><p>20 practical questions covering accounts, GST, vendor/client ledgers, project costing, purchase control, inventory and operations.</p>
 <div class="rulebar"><div class="rule"><b>20</b><span>Questions</span></div><div class="rule"><b>100</b><span>Marks</span></div><div class="rule"><b>80%</b><span>Pass Score</span></div><div class="rule"><b>16/20</b><span>Minimum Correct</span></div></div></div>
@@ -225,13 +243,13 @@ header{border-bottom:1px solid #e4e9ee;padding:18px 20px;background:#fff;positio
 <div class="feedback" id="fb19"></div>
 <div class="nav"><button type="button" class="next" id="next19" onclick="goNext(19)">View Result</button></div>
 </section>
-<section class="result" id="result"><div class="logo">Astys</div><h1>Assessment Result</h1><div class="score" id="scoreCircle">0%</div><h2 id="status"></h2><p id="summary"></p><button class="retry" onclick="location.reload()">Retake Assessment</button></section>
+<section class="result" id="result"><img src="img/Astys Logo.PNG" alt="Astys Logo" style="height:36px; margin-bottom:12px; display:inline-block;"><h1>Assessment Result</h1><div class="score" id="scoreCircle">0%</div><h2 id="status"></h2><p id="summary"></p><button class="retry" onclick="location.reload()">Retake Assessment</button></section>
 </div>
-<<script>
+<script>
 var ADMIN_PASSCODE = "ASTYS2026";
 var EXAM_TITLE = "Accounts & Operations Assessment";
 var SUPABASE_URL = "https://cnhpywstdyfphcseukls.supabase.co";
-var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaHB5d3N0ZHlmcGhjc2V1a2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAxNjAwMDAsImV4cCI6MjA1NTczNjAwMH0.dummy_or_real_key";
+var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaHB5d3N0ZHlmcGhjc2V1a2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyNjcyNTgsImV4cCI6MjEwNjg0MzI1OH0.0dxYaQdl_GYpFVAzCXMBJJGn2ysjxvewlZZ5VqixP1Y";
 
 var CANDIDATE_DATA = null;
 
@@ -350,4 +368,37 @@ function saveResultToSupabase(pct, statusStr) {
    syncBox.innerHTML = "⚠️ Result calculated locally. (Database Sync: " + err.message + ")";
  });
 }
+
+function autoStartFromUrlParams() {
+  var urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("unlocked") === "true") {
+    var name = urlParams.get("name") || "";
+    var phone = urlParams.get("phone") || "";
+    var email = urlParams.get("email") || "";
+    var pos = urlParams.get("position") || "Accounts & Operations Executive";
+
+    if (name && phone && email) {
+      document.getElementById("adminGateCard").style.display = "none";
+      document.getElementById("registrationCard").style.display = "none";
+      document.getElementById("candName").value = name;
+      document.getElementById("candPhone").value = phone;
+      document.getElementById("candEmail").value = email;
+      document.getElementById("candPosition").value = pos;
+
+      CANDIDATE_DATA = {
+        name: name,
+        ph_no: phone,
+        email: email,
+        position_applied: pos
+      };
+
+      document.getElementById("progressWrap").style.display = "block";
+      var q0 = document.getElementById("q0");
+      if (q0) q0.className = "qcard active";
+      document.getElementById("bar").style.width = "5%";
+      window.scrollTo(0, 0);
+    }
+  }
+}
+window.addEventListener("DOMContentLoaded", autoStartFromUrlParams);
 </script></body></html>

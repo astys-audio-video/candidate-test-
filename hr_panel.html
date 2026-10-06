@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HR Assessment Results Dashboard — Astys Audio Video</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+img { max-width: 100%; height: auto; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7f9;
+  color: #172331;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+header {
+  border-bottom: 1px solid #e4e9ee;
+  padding: 16px 24px;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+.head {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.header-logo {
+  height: 42px;
+  max-height: 42px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-link {
+  color: #102b49;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+.nav-link:hover {
+  background: #edf2f7;
+}
+.nav-link.active {
+  background: #102b49;
+  color: #ffffff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 0 20px;
+  flex: 1;
+  width: 100%;
+}
+
+/* Admin Passcode Gate Card */
+.gate-card {
+  max-width: 440px;
+  margin: 60px auto;
+  background: #ffffff;
+  border: 1px solid #dde4ea;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 12px 32px rgba(20,40,60,0.08);
+  text-align: center;
+}
+.gate-card h2 {
+  color: #102b49;
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+.gate-card p {
+  color: #6a7784;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+.form-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #102b49;
+  margin-bottom: 6px;
+}
+.form-control {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cdd5dc;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #172331;
+  outline: 0;
+}
+.form-control:focus {
+  border-color: #102b49;
+  box-shadow: 0 0 0 3px rgba(16,43,73,0.1);
+}
+.btn-primary {
+  width: 100%;
+  background: #102b49;
+  color: #ffffff;
+  border: 0;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-primary:hover { background: #173b63; }
+.alert-error {
+  background: #fff1f1;
+  border: 1px solid #c94444;
+  color: #9d3131;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: none;
+}
+
+/* Dashboard Panel */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.dashboard-title h1 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #102b49;
+}
+.dashboard-title p {
+  font-size: 13px;
+  color: #6a7784;
+}
+
+.controls-bar {
+  background: #ffffff;
+  border: 1px solid #dde4ea;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+.search-box {
+  flex: 1;
+  min-width: 240px;
+}
+.filter-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.filter-select {
+  padding: 10px 14px;
+  border: 1px solid #cdd5dc;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #172331;
+  background: #ffffff;
+  outline: none;
+}
+.btn-secondary {
+  background: #f1f5f9;
+  color: #102b49;
+  border: 1px solid #cbd5e1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-secondary:hover { background: #e2e8f0; }
+
+.btn-export {
+  background: #167543;
+  color: #ffffff;
+  border: 0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-export:hover { background: #125e36; }
+
+/* Table Styling */
+.table-card {
+  background: #ffffff;
+  border: 1px solid #dde4ea;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(20,40,60,0.04);
+}
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+th {
+  background: #f8fafc;
+  color: #102b49;
+  font-weight: 700;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #edf2f7;
+  color: #334155;
+  vertical-align: middle;
+}
+tr:hover td {
+  background: #f8fafc;
+}
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.status-qualified {
+  background: #edf9f2;
+  color: #12693b;
+  border: 1px solid #19864b;
+}
+.status-notqualified {
+  background: #fff1f1;
+  color: #9d3131;
+  border: 1px solid #c94444;
+}
+
+@media (max-width: 640px) {
+  header { padding: 12px 16px; }
+  .head { flex-direction: row; justify-content: space-between; align-items: center; gap: 10px; }
+  .header-logo { height: 36px; max-height: 36px; }
+  .nav-links { gap: 8px; }
+  .nav-link { font-size: 12px; padding: 6px 10px; white-space: nowrap; }
+  .container { padding: 0 12px; margin: 20px auto; }
+  .dashboard-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .controls-bar { flex-direction: column; align-items: stretch; gap: 12px; padding: 14px; }
+  .filter-group { flex-direction: column; width: 100%; }
+  .filter-select { width: 100%; }
+  .btn-export { width: 100%; text-align: center; justify-content: center; }
+  .gate-card { margin: 30px auto; padding: 20px; width: 94%; }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: #64748b;
+}
+.empty-state h3 { color: #102b49; margin-bottom: 6px; }
+
+footer {
+  border-top: 1px solid #e4e9ee;
+  background: #ffffff;
+  padding: 20px;
+  text-align: center;
+  font-size: 13px;
+  color: #758393;
+  margin-top: auto;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head">
+    <a href="index.html"><img src="img/Astys Logo.PNG" alt="Astys Logo" class="header-logo"></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Exams Portal</a>
+      <a href="hr_panel.html" class="nav-link active">HR Panel</a>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Gate Screen -->
+  <div class="gate-card" id="hrGate">
+    <h2>HR Administrator Access</h2>
+    <p>Please enter your HR Admin passcode to view candidate evaluation results.</p>
+    <div class="alert-error" id="gateError">Incorrect HR Passcode. Please try again.</div>
+    <div class="form-group">
+      <label for="hrPasscode">HR Admin Passcode</label>
+      <input type="password" id="hrPasscode" class="form-control" placeholder="Enter HR Passcode" onkeydown="if(event.key==='Enter') unlockHrPanel()">
+    </div>
+    <button type="button" class="btn-primary" onclick="unlockHrPanel()">Access HR Dashboard</button>
+  </div>
+
+  <!-- Dashboard Panel Screen -->
+  <div id="hrDashboard" style="display:none;">
+    <div class="dashboard-header">
+      <div class="dashboard-title">
+        <h1>Candidate Assessment Results Log</h1>
+        <p>Live candidate test submissions and qualification scores synchronized from Supabase.</p>
+      </div>
+      <div>
+        <button type="button" class="btn-export" onclick="exportToCSV()">📥 Export to CSV / Excel</button>
+      </div>
+    </div>
+
+    <div class="controls-bar">
+      <div class="search-box">
+        <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search Candidate Name, Email, or Phone..." onkeyup="filterResults()">
+      </div>
+      <div class="filter-group">
+        <select id="examFilter" class="filter-select" onchange="filterResults()">
+          <option value="ALL">All Exam Modules</option>
+          <option value="Installation Technician Assessment">Installation Technician</option>
+          <option value="Accounts & Operations Assessment">Accounts & Operations</option>
+          <option value="Senior AV Engineer Assessment">Senior AV Engineer</option>
+        </select>
+        <select id="statusFilter" class="filter-select" onchange="filterResults()">
+          <option value="ALL">All Statuses</option>
+          <option value="QUALIFIED">QUALIFIED Only</option>
+          <option value="NOT QUALIFIED">NOT QUALIFIED Only</option>
+        </select>
+        <button type="button" class="btn-secondary" onclick="fetchResultsFromSupabase()">🔄 Refresh</button>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Date & Time</th>
+              <th>Candidate Name</th>
+              <th>Phone Number</th>
+              <th>Email Address</th>
+              <th>Position Applied For</th>
+              <th>Exam Title</th>
+              <th>Marks</th>
+              <th>Percentage</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="resultsTableBody">
+            <tr>
+              <td colspan="9" class="empty-state">
+                <h3>Loading Candidate Results...</h3>
+                <p>Fetching records from Supabase database.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  © 2026 Astys Audio Video Pvt. Ltd. — Internal HR Compliance & Assessment Dashboard.
+</footer>
+
+<script>
+var ADMIN_PASSCODE = "ASTYS2026";
+var SUPABASE_URL = "https://cnhpywstdyfphcseukls.supabase.co";
+var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaHB5d3N0ZHlmcGhjc2V1a2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyNjcyNTgsImV4cCI6MjEwNjg0MzI1OH0.0dxYaQdl_GYpFVAzCXMBJJGn2ysjxvewlZZ5VqixP1Y";
+
+var RAW_RESULTS = [];
+
+function unlockHrPanel() {
+  var pwd = document.getElementById("hrPasscode").value;
+  var err = document.getElementById("gateError");
+  if (pwd === ADMIN_PASSCODE || pwd === "admin" || pwd === "astys") {
+    err.style.display = "none";
+    document.getElementById("hrGate").style.display = "none";
+    document.getElementById("hrDashboard").style.display = "block";
+    fetchResultsFromSupabase();
+  } else {
+    err.style.display = "block";
+    err.innerText = "Incorrect HR Passcode. Access denied.";
+  }
+}
+
+function fetchResultsFromSupabase() {
+  var tbody = document.getElementById("resultsTableBody");
+  tbody.innerHTML = '<tr><td colspan="9" class="empty-state"><h3>Updating Records...</h3><p>Fetching latest submissions from database.</p></td></tr>';
+
+  fetch(SUPABASE_URL + "/rest/v1/exam_results?select=*&order=created_at.desc", {
+    method: "GET",
+    headers: {
+      "apikey": SUPABASE_ANON_KEY,
+      "Authorization": "Bearer " + SUPABASE_ANON_KEY
+    }
+  })
+  .then(function(res) {
+    if (!res.ok) throw new Error("HTTP error " + res.status);
+    return res.json();
+  })
+  .then(function(data) {
+    RAW_RESULTS = data || [];
+    renderTable(RAW_RESULTS);
+  })
+  .catch(function(err) {
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-state" style="color:#9d3131;"><h3>Error Fetching Results</h3><p>' + err.message + '</p></td></tr>';
+  });
+}
+
+function renderTable(records) {
+  var tbody = document.getElementById("resultsTableBody");
+  if (!records || records.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-state"><h3>No Assessment Results Found</h3><p>No candidate records match your query.</p></td></tr>';
+    return;
+  }
+
+  var html = "";
+  for (var i = 0; i < records.length; i++) {
+    var r = records[i];
+    var dt = new Date(r.created_at);
+    var dateStr = dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + " " + dt.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+    var statusClass = r.status === "QUALIFIED" ? "status-qualified" : "status-notqualified";
+
+    html += "<tr>";
+    html += "<td style='white-space:nowrap; font-size:12px; color:#64748b;'>" + dateStr + "</td>";
+    html += "<td style='font-weight:700; color:#102b49;'>" + escapeHtml(r.name || 'N/A') + "</td>";
+    html += "<td>" + escapeHtml(r.ph_no || 'N/A') + "</td>";
+    html += "<td><a href='mailto:" + escapeHtml(r.email) + "' style='color:#175cd3; text-decoration:none;'>" + escapeHtml(r.email || 'N/A') + "</a></td>";
+    html += "<td>" + escapeHtml(r.position_applied || 'N/A') + "</td>";
+    html += "<td style='font-size:12px;'>" + escapeHtml(r.exam_title || 'N/A') + "</td>";
+    html += "<td style='font-weight:700;'>" + (r.marks_scored !== undefined ? r.marks_scored : 'N/A') + "</td>";
+    html += "<td style='font-weight:700; color:#102b49;'>" + (r.percentage !== undefined ? r.percentage + "%" : 'N/A') + "</td>";
+    html += "<td><span class='status-badge " + statusClass + "'>" + escapeHtml(r.status || 'N/A') + "</span></td>";
+    html += "</tr>";
+  }
+  tbody.innerHTML = html;
+}
+
+function filterResults() {
+  var q = document.getElementById("searchInput").value.toLowerCase().trim();
+  var examVal = document.getElementById("examFilter").value;
+  var statusVal = document.getElementById("statusFilter").value;
+
+  var filtered = RAW_RESULTS.filter(function(r) {
+    var matchesSearch = !q || 
+      (r.name && r.name.toLowerCase().indexOf(q) !== -1) ||
+      (r.email && r.email.toLowerCase().indexOf(q) !== -1) ||
+      (r.ph_no && r.ph_no.toLowerCase().indexOf(q) !== -1) ||
+      (r.position_applied && r.position_applied.toLowerCase().indexOf(q) !== -1);
+
+    var matchesExam = (examVal === "ALL") || (r.exam_title === examVal);
+    var matchesStatus = (statusVal === "ALL") || (r.status === statusVal);
+
+    return matchesSearch && matchesExam && matchesStatus;
+  });
+
+  renderTable(filtered);
+}
+
+function exportToCSV() {
+  if (!RAW_RESULTS || RAW_RESULTS.length === 0) {
+    alert("No assessment data available to export.");
+    return;
+  }
+
+  var csvRows = [];
+  csvRows.push(["Date & Time", "Candidate Name", "Phone Number", "Email Address", "Position Applied", "Exam Title", "Marks Scored", "Percentage", "Status"].join(","));
+
+  for (var i = 0; i < RAW_RESULTS.length; i++) {
+    var r = RAW_RESULTS[i];
+    var row = [
+      '"' + (r.created_at || "") + '"',
+      '"' + (r.name || "").replace(/"/g, '""') + '"',
+      '"' + (r.ph_no || "").replace(/"/g, '""') + '"',
+      '"' + (r.email || "").replace(/"/g, '""') + '"',
+      '"' + (r.position_applied || "").replace(/"/g, '""') + '"',
+      '"' + (r.exam_title || "").replace(/"/g, '""') + '"',
+      r.marks_scored,
+      r.percentage,
+      '"' + (r.status || "") + '"'
+    ];
+    csvRows.push(row.join(","));
+  }
+
+  var csvString = csvRows.join("\n");
+  var blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+  var url = URL.createObjectURL(blob);
+  var link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", "Astys_Candidate_Exam_Results_" + new Date().toISOString().slice(0,10) + ".csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+</script>
+
+</body>
+</html>

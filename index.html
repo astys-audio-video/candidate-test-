@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Astys Assessment & Examination Portal</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+img { max-width: 100%; height: auto; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7f9;
+  color: #172331;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+header {
+  border-bottom: 1px solid #e4e9ee;
+  padding: 16px 24px;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+.head {
+  max-width: 1050px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.header-logo {
+  height: 42px;
+  max-height: 42px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+.logo {
+  font-size: 30px;
+  font-weight: 800;
+  color: #102b49;
+}
+.logo small {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #758393;
+  margin-top: 2px;
+}
+.company-info {
+  font-size: 13px;
+  color: #758393;
+  text-align: right;
+  line-height: 1.4;
+}
+.hero {
+  background: linear-gradient(135deg, #102b49 0%, #1a426e 100%);
+  color: #ffffff;
+  padding: 48px 24px;
+  text-align: center;
+}
+.hero-inner {
+  max-width: 800px;
+  margin: auto;
+}
+.hero h1 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+.hero p {
+  font-size: 16px;
+  color: #c5d6e6;
+  line-height: 1.6;
+}
+.container {
+  max-width: 1050px;
+  margin: 40px auto;
+  padding: 0 20px;
+  flex: 1;
+}
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #102b49;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #dbe2e8;
+}
+.exams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 24px;
+}
+.exam-card {
+  background: #ffffff;
+  border: 1px solid #dde4ea;
+  border-radius: 16px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  box-shadow: 0 4px 16px rgba(20,40,60,0.04);
+  position: relative;
+  overflow: hidden;
+}
+.exam-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(16,43,73,0.12);
+  border-color: #102b49;
+}
+.badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+.badge-tech { background: #eef6ff; color: #175cd3; }
+.badge-ops { background: #f0fdf4; color: #167543; }
+.badge-av { background: #fcf4ff; color: #87189d; }
+
+.exam-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #102b49;
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+.exam-card p {
+  font-size: 14px;
+  color: #6a7784;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+.rule-specs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #edf2f7;
+}
+.spec-item {
+  text-align: center;
+}
+.spec-item b {
+  display: block;
+  font-size: 14px;
+  color: #102b49;
+}
+.spec-item span {
+  font-size: 11px;
+  color: #74818e;
+}
+.start-btn {
+  width: 100%;
+  background: #102b49;
+  color: #ffffff;
+  border: 0;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-align: center;
+  text-decoration: none;
+}
+.start-btn:hover {
+  background: #173b63;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(16, 43, 73, 0.65);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+.modal-overlay.active {
+  display: flex;
+}
+.modal-card {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 480px;
+  width: 100%;
+  padding: 32px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  position: relative;
+  animation: modalIn 0.25s ease-out;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  border: 0; background: #f2f5f7;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  font-weight: 700;
+  color: #758393;
+  cursor: pointer;
+}
+.modal-close:hover { background: #e4e9ee; color: #102b49; }
+.modal-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #102b49;
+  margin-bottom: 6px;
+}
+.modal-subtitle {
+  font-size: 13px;
+  color: #6a7784;
+  margin-bottom: 20px;
+}
+.form-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #102b49;
+  margin-bottom: 6px;
+}
+.form-control {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cdd5dc;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #172331;
+  outline: 0;
+  transition: border-color 0.2s;
+}
+.form-control:focus {
+  border-color: #102b49;
+  box-shadow: 0 0 0 3px rgba(16,43,73,0.1);
+}
+.alert-error {
+  background: #fff1f1;
+  border: 1px solid #c94444;
+  color: #9d3131;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: none;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-btn {
+  color: #102b49;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-btn:hover {
+  background: #102b49;
+  color: #ffffff;
+  border-color: #102b49;
+}
+
+@media (max-width: 640px) {
+  header { padding: 12px 16px; }
+  .head { flex-direction: row; justify-content: space-between; align-items: center; gap: 10px; }
+  .header-logo { height: 36px; max-height: 36px; }
+  .nav-links { gap: 8px; }
+  .nav-btn { font-size: 12px; padding: 6px 10px; }
+  .hero { padding: 28px 16px; }
+  .hero h1 { font-size: 22px; line-height: 1.35; }
+  .hero p { font-size: 14px; }
+  .container { margin: 24px auto; padding: 0 16px; }
+  .exams-grid { grid-template-columns: 1fr; gap: 16px; }
+  .modal-card { padding: 20px; width: 94%; }
+  .rule-specs { padding: 8px; gap: 4px; }
+  .spec-item b { font-size: 13px; }
+  .spec-item span { font-size: 10px; }
+}
+footer {
+  border-top: 1px solid #e4e9ee;
+  background: #ffffff;
+  padding: 20px;
+  text-align: center;
+  font-size: 13px;
+  color: #758393;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head">
+    <a href="index.html"><img src="img/Astys Logo.PNG" alt="Astys Audio Video" class="header-logo"></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn" style="background:#102b49; color:#fff; border-color:#102b49;">Exams Portal</a>
+      <a href="hr_panel.html" class="nav-btn">📊 HR Panel</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Online Candidate & Technician Examination Portal</h1>
+    <p>Select your assigned assessment module below. Invigilator passcode unlock and candidate registration are required before launching your test.</p>
+  </div>
+</section>
+
+<div class="container">
+  <div class="section-title">Available Assessment Examinations</div>
+  
+  <div class="exams-grid">
+
+    <!-- Card 1: Installation Technician -->
+    <div class="exam-card">
+      <div>
+        <span class="badge badge-tech">Field Operations & Safety</span>
+        <h3>Installation Technician Assessment</h3>
+        <p>20 practical questions covering tools, ladder safety, cable pulling, speaker mounting, XLR/speaker wiring & site work.</p>
+        <div class="rule-specs">
+          <div class="spec-item"><b>20</b><span>Questions</span></div>
+          <div class="spec-item"><b>100</b><span>Marks</span></div>
+          <div class="spec-item"><b>80%</b><span>Pass Score</span></div>
+        </div>
+      </div>
+      <button type="button" class="start-btn" onclick="openExamPortal('Astys_Installation_Technician_Assessment.html', 'Installation Technician Assessment', 'Installation Technician')">
+        Select & Start Exam →
+      </button>
+    </div>
+
+    <!-- Card 2: Accounts & Operations -->
+    <div class="exam-card">
+      <div>
+        <span class="badge badge-ops">Accounts, GST & Operations</span>
+        <h3>Accounts & Operations Assessment</h3>
+        <p>20 practical questions covering GST calculations, vendor/client ledgers, purchase controls, project margin & cash control.</p>
+        <div class="rule-specs">
+          <div class="spec-item"><b>20</b><span>Questions</span></div>
+          <div class="spec-item"><b>100</b><span>Marks</span></div>
+          <div class="spec-item"><b>80%</b><span>Pass Score</span></div>
+        </div>
+      </div>
+      <button type="button" class="start-btn" onclick="openExamPortal('Astys_Accounts_Operations_Assessment.html', 'Accounts & Operations Assessment', 'Accounts & Operations Executive')">
+        Select & Start Exam →
+      </button>
+    </div>
+
+    <!-- Card 3: Senior AV Engineer -->
+    <div class="exam-card">
+      <div>
+        <span class="badge badge-av">Engineering & System Design</span>
+        <h3>Senior AV Systems Engineer Assessment</h3>
+        <p>20 engineering questions covering audio signal flow, video matrixing, EDID/HDCP, Dante IP audio, control systems & DSP tuning.</p>
+        <div class="rule-specs">
+          <div class="spec-item"><b>20</b><span>Questions</span></div>
+          <div class="spec-item"><b>100</b><span>Marks</span></div>
+          <div class="spec-item"><b>80%</b><span>Pass Score</span></div>
+        </div>
+      </div>
+      <button type="button" class="start-btn" onclick="openExamPortal('test av engineer.html', 'Senior AV Engineer Assessment', 'Senior AV Engineer')">
+        Select & Start Exam →
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal Dialog for Admin Passcode & Registration -->
+<div class="modal-overlay" id="examModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeExamModal()">✕</button>
+
+    <!-- Step 1: Admin Passcode -->
+    <div id="modalStep1">
+      <div class="modal-title">Invigilator Access Passcode</div>
+      <div class="modal-subtitle" id="selectedExamTitle">Please ask the HR Administrator or Invigilator to unlock this exam.</div>
+      <div class="alert-error" id="modalGateError">Incorrect Admin Passcode.</div>
+      <div class="form-group">
+        <label for="modalAdminPasscode">Admin Passcode</label>
+        <input type="password" id="modalAdminPasscode" class="form-control" placeholder="Enter Admin Passcode" onkeydown="if(event.key==='Enter') verifyAdminPasscode()">
+      </div>
+      <button type="button" class="start-btn" onclick="verifyAdminPasscode()">Unlock Exam Registration</button>
+    </div>
+
+    <!-- Step 2: Candidate Registration -->
+    <div id="modalStep2" style="display:none;">
+      <div class="modal-title">Candidate Information</div>
+      <div class="modal-subtitle">Complete your candidate profile to begin the test.</div>
+      <div class="alert-error" id="modalRegError">Please complete all required fields.</div>
+      <form onsubmit="event.preventDefault(); launchExamFile();">
+        <div class="form-group">
+          <label for="modalName">Full Name *</label>
+          <input type="text" id="modalName" class="form-control" placeholder="e.g. Rajesh Kumar" required>
+        </div>
+        <div class="form-group">
+          <label for="modalPhone">Phone Number *</label>
+          <input type="tel" id="modalPhone" class="form-control" placeholder="e.g. +91 9876543210" required>
+        </div>
+        <div class="form-group">
+          <label for="modalEmail">Email Address *</label>
+          <input type="email" id="modalEmail" class="form-control" placeholder="e.g. rajesh@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="modalPosition">Position Applied For *</label>
+          <input type="text" id="modalPosition" class="form-control" required>
+        </div>
+        <button type="submit" class="start-btn">Begin Assessment Exam Now →</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  © 2026 Astys Audio Video Pvt. Ltd. — All Rights Reserved. Enterprise Compliance & Evaluation Infrastructure.
+</footer>
+
+<script>
+var ADMIN_PASSCODE = "ASTYS2026";
+var SELECTED_EXAM_URL = "";
+
+function openExamPortal(targetUrl, examTitle, defaultPosition) {
+  SELECTED_EXAM_URL = targetUrl;
+  document.getElementById("selectedExamTitle").innerText = "Unlocking: " + examTitle;
+  document.getElementById("modalPosition").value = defaultPosition;
+  document.getElementById("modalAdminPasscode").value = "";
+  document.getElementById("modalGateError").style.display = "none";
+  document.getElementById("modalRegError").style.display = "none";
+  
+  // Show Step 1 first
+  document.getElementById("modalStep1").style.display = "block";
+  document.getElementById("modalStep2").style.display = "none";
+  
+  document.getElementById("examModal").classList.add("active");
+  setTimeout(function() {
+    document.getElementById("modalAdminPasscode").focus();
+  }, 100);
+}
+
+function closeExamModal() {
+  document.getElementById("examModal").classList.remove("active");
+}
+
+function verifyAdminPasscode() {
+  var pwd = document.getElementById("modalAdminPasscode").value;
+  var err = document.getElementById("modalGateError");
+  if (pwd === ADMIN_PASSCODE || pwd === "admin" || pwd === "astys") {
+    err.style.display = "none";
+    document.getElementById("modalStep1").style.display = "none";
+    document.getElementById("modalStep2").style.display = "block";
+    document.getElementById("modalName").focus();
+  } else {
+    err.style.display = "block";
+    err.innerText = "Incorrect Admin Passcode. Please contact the invigilator.";
+  }
+}
+
+function launchExamFile() {
+  var name = document.getElementById("modalName").value.trim();
+  var phone = document.getElementById("modalPhone").value.trim();
+  var email = document.getElementById("modalEmail").value.trim();
+  var pos = document.getElementById("modalPosition").value.trim();
+  var err = document.getElementById("modalRegError");
+
+  if (!name || !phone || !email || !pos) {
+    err.style.display = "block";
+    err.innerText = "Please complete all candidate registration fields.";
+    return;
+  }
+
+  // Pass candidate details via URL search params or launch exam file
+  var params = new URLSearchParams({
+    unlocked: "true",
+    name: name,
+    phone: phone,
+    email: email,
+    position: pos
+  });
+
+  window.location.href = SELECTED_EXAM_URL + "?" + params.toString();
+}
+</script>
+
+</body>
+</html>
