@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Astys Senior AV Engineer Assessment</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  color: #172331;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  border-bottom: 1px solid #e4e9ee;
+  padding: 18px 20px;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.head {
+  max-width: 900px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 800;
+  color: #102b49;
+}
+
+.logo small {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #758393;
+  margin-top: 2px;
+}
+
+.company {
+  font-size: 12px;
+  color: #758393;
+  text-align: right;
+  line-height: 1.4;
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 28px auto;
+  padding: 0 16px 40px;
+}
+
+.intro {
+  border: 1px solid #e0e6eb;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 18px;
+}
+
+.intro h1 {
+  margin: 0 0 6px;
+  color: #102b49;
+  font-size: 25px;
+}
+
+.intro p {
+  margin: 0;
+  color: #6a7784;
+  line-height: 1.5;
+}
+
+.rulebar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.rule {
+  background: #f6f8fa;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.rule b {
+  display: block;
+  color: #102b49;
+}
+
+.rule span {
+  font-size: 10px;
+  color: #74818e;
+}
+
+.progress {
+  height: 7px;
+  background: #edf1f4;
+  border-radius: 20px;
+  margin: 0 0 18px;
+  overflow: hidden;
+}
+
+#bar {
+  height: 100%;
+  width: 5%;
+  background: #102b49;
+  transition: 0.2s;
+}
+
+.qcard {
+  display: none;
+  border: 1px solid #dde4ea;
+  border-radius: 14px;
+  padding: 25px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(20, 40, 60, 0.05);
+}
+
+.qcard.active {
+  display: block;
+}
+
+.toprow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #6e7a86;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.cat {
+  background: #f3f6f8;
+  padding: 5px 9px;
+  border-radius: 18px;
+  color: #173b63;
+}
+
+.question {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.45;
+  margin-bottom: 18px;
+}
+
+.options {
+  display: grid;
+  gap: 10px;
+}
+
+.option {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #dce3e8;
+  background: #ffffff;
+  border-radius: 9px;
+  padding: 14px 15px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #172331;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: #fafcfd;
+}
+
+.option:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.letter {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #f2f5f7;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 25px;
+  font-size: 12px;
+}
+
+.correct {
+  background: #edf9f2 !important;
+  border-color: #19864b !important;
+  color: #12693b !important;
+}
+
+.wrong {
+  background: #fff1f1 !important;
+  border-color: #c94444 !important;
+  color: #9d3131 !important;
+}
+
+.feedback {
+  display: none;
+  margin-top: 15px;
+  padding: 13px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.feedback.show {
+  display: block;
+}
+
+.feedback.good {
+  background: #edf9f2;
+  color: #146a3d;
+}
+
+.feedback.bad {
+  background: #fff1f1;
+  color: #8d3030;
+}
+
+.nav {
+  text-align: right;
+  margin-top: 18px;
+}
+
+.next {
+  display: none;
+  border: 0;
+  background: #102b49;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.next.show {
+  display: inline-block;
+}
+
+.result {
+  display: none;
+  border: 1px solid #dde4ea;
+  border-radius: 14px;
+  padding: 28px;
+  text-align: center;
+}
+
+.result.show {
+  display: block;
+}
+
+.score {
+  width: 130px;
+  height: 130px;
+  border: 9px solid #102b49;
+  border-radius: 50%;
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 800;
+  color: #102b49;
+}
+
+.pass {
+  color: #168447;
+}
+
+.fail {
+  color: #c63e3e;
+}
+
+.retry {
+  border: 0;
+  background: #102b49;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.form-card {
+  border: 1px solid #dde4ea;
+  border-radius: 14px;
+  padding: 28px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(20,40,60,.05);
+  margin-bottom: 20px;
+}
+
+.form-card h2 {
+  margin: 0 0 8px;
+  color: #102b49;
+  font-size: 22px;
+}
+
+.form-card p {
+  margin: 0 0 20px;
+  color: #6a7784;
+  font-size: 14px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #102b49;
+  margin-bottom: 6px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cdd5dc;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #172331;
+  outline: 0;
+  transition: border-color 0.2s;
+}
+
+.form-control:focus {
+  border-color: #102b49;
+  box-shadow: 0 0 0 3px rgba(16,43,73,0.1);
+}
+
+.btn-primary {
+  width: 100%;
+  background: #102b49;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 14px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  border: 0;
+  transition: background 0.2s;
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background: #173b63;
+}
+
+.alert-error {
+  background: #fff1f1;
+  border: 1px solid #c94444;
+  color: #9d3131;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: none;
+}
+
+.sync-status {
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.sync-status.saving {
+  background: #eef4f9;
+  color: #102b49;
+  border: 1px solid #b8d1e5;
+}
+
+.sync-status.success {
+  background: #edf9f2;
+  color: #12693b;
+  border: 1px solid #19864b;
+}
+
+.sync-status.error {
+  background: #fff1f1;
+  color: #9d3131;
+  border: 1px solid #c94444;
+}
+
+@media (max-width: 600px) {
+  .rulebar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .company {
+    font-size: 10px;
+  }
+
+  .question {
+    font-size: 18px;
+  }
+
+  .qcard {
+    padding: 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="head">
+    <div class="logo">
+      Astys
+      <small>ADD SOUL TO YOUR SPACE</small>
+    </div>
+
+    <div class="company">
+      Astys Audio Video Pvt. Ltd.<br>
+      Senior AV Engineer Assessment
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="intro">
+    <h1>Senior AV Systems Engineer Assessment</h1>
+    <p>
+      20 practical multiple-choice questions.
+      Minimum qualification: 80%.
+    </p>
+
+    <div class="rulebar">
+      <div class="rule">
+        <b>20</b>
+        <span>Questions</span>
+      </div>
+
+      <div class="rule">
+        <b>100</b>
+        <span>Marks</span>
+      </div>
+
+      <div class="rule">
+        <b>80%</b>
+        <span>Pass Score</span>
+      </div>
+
+      <div class="rule">
+        <b>16/20</b>
+        <span>Minimum Correct</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 1: Admin Passcode Gate Card -->
+  <div class="form-card" id="adminGateCard">
+    <h2>Invigilator / Admin Access Gate</h2>
+    <p>Please ask the HR Administrator or Exam Invigilator to enter the passcode to unlock this assessment.</p>
+    <div class="alert-error" id="gateError">Invalid Admin Passcode. Please try again.</div>
+    <div class="form-group">
+      <label for="adminPasscode">Admin Passcode</label>
+      <input type="password" id="adminPasscode" class="form-control" placeholder="Enter Admin Passcode" onkeydown="if(event.key==='Enter') unlockAdminGate()">
+    </div>
+    <button type="button" class="btn-primary" onclick="unlockAdminGate()">Unlock Exam Portal</button>
+  </div>
+
+  <!-- Step 2: Candidate Registration Card -->
+  <div class="form-card" id="registrationCard" style="display:none;">
+    <h2>Candidate Registration Information</h2>
+    <p>Please fill in your details accurately before starting the assessment exam.</p>
+    <div class="alert-error" id="regError">Please complete all required fields.</div>
+    <form id="candidateForm" onsubmit="event.preventDefault(); startCandidateExam();">
+      <div class="form-group">
+        <label for="candName">Full Name *</label>
+        <input type="text" id="candName" class="form-control" placeholder="e.g. Vikram Singh" required>
+      </div>
+      <div class="form-group">
+        <label for="candPhone">Phone Number *</label>
+        <input type="tel" id="candPhone" class="form-control" placeholder="e.g. +91 9876543210" required>
+      </div>
+      <div class="form-group">
+        <label for="candEmail">Email Address *</label>
+        <input type="email" id="candEmail" class="form-control" placeholder="e.g. vikram@example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="candPosition">Position Applied For *</label>
+        <input type="text" id="candPosition" class="form-control" value="Senior AV Engineer" required>
+      </div>
+      <button type="submit" class="btn-primary">Start Assessment Exam</button>
+    </form>
+  </div>
+
+  <div class="progress" id="progressWrap" style="display:none;">
+    <div id="bar"></div>
+  </div>
+
+  <div id="quiz"></div>
+
+  <section class="result" id="result">
+    <div class="logo">Astys</div>
+
+    <h1>Assessment Result</h1>
+
+    <div class="score" id="scoreCircle">0%</div>
+
+    <h2 id="status"></h2>
+
+    <p id="summary"></p>
+
+    <button
+      class="retry"
+      type="button"
+      onclick="location.reload()"
+    >
+      Retake Assessment
+    </button>
+  </section>
+
+</div>
+
+<script>
+var ADMIN_PASSCODE = "ASTYS2026";
+var EXAM_TITLE = "Senior AV Engineer Assessment";
+var SUPABASE_URL = "https://cnhpywstdyfphcseukls.supabase.co";
+var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaHB5d3N0ZHlmcGhjc2V1a2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAxNjAwMDAsImV4cCI6MjA1NTczNjAwMH0.dummy_or_real_key";
+
+var CANDIDATE_DATA = null;
+
+function unlockAdminGate() {
+  var pwd = document.getElementById("adminPasscode").value;
+  var err = document.getElementById("gateError");
+  if (pwd === ADMIN_PASSCODE || pwd === "admin" || pwd === "astys") {
+    err.style.display = "none";
+    document.getElementById("adminGateCard").style.display = "none";
+    document.getElementById("registrationCard").style.display = "block";
+  } else {
+    err.style.display = "block";
+    err.innerText = "Incorrect Admin Passcode. Please contact the invigilator.";
+  }
+}
+
+function startCandidateExam() {
+  var name = document.getElementById("candName").value.trim();
+  var phone = document.getElementById("candPhone").value.trim();
+  var email = document.getElementById("candEmail").value.trim();
+  var pos = document.getElementById("candPosition").value.trim();
+  var err = document.getElementById("regError");
+
+  if (!name || !phone || !email || !pos) {
+    err.style.display = "block";
+    err.innerText = "Please fill in all required fields.";
+    return;
+  }
+
+  CANDIDATE_DATA = {
+    name: name,
+    ph_no: phone,
+    email: email,
+    position_applied: pos
+  };
+
+  err.style.display = "none";
+  document.getElementById("registrationCard").style.display = "none";
+  document.getElementById("progressWrap").style.display = "block";
+  renderQuestions();
+  document.getElementById("bar").style.width = "5%";
+  window.scrollTo(0, 0);
+}
+
+var QUESTIONS = [
+
+{
+  category: "Signal Flow",
+  question: "Which signal flow is technically correct for a microphone feeding a passive loudspeaker system?",
+  options: [
+    "Mic → Amplifier → DSP → Speaker",
+    "Mic → Mixer/DSP → Amplifier → Speaker",
+    "Mic → Speaker → DSP → Amplifier",
+    "Mic → Amplifier → Speaker → Mixer"
+  ],
+  answer: 1,
+  explanation:
+    "A microphone first feeds a preamp, mixer or DSP. The processed line-level signal then feeds the power amplifier, which drives the passive loudspeaker."
+},
+
+{
+  category: "Audio Fundamentals",
+  question: "A balanced analogue audio connection normally uses which conductors?",
+  options: [
+    "Signal + Ground",
+    "Hot + Cold + Shield/Ground",
+    "Positive + Negative speaker output",
+    "Data + Clock"
+  ],
+  answer: 1,
+  explanation:
+    "Balanced analogue audio uses hot (+), cold (-) and shield/ground. This helps reject common-mode interference."
+},
+
+{
+  category: "DSP",
+  question: "What is the main purpose of a correctly configured DSP limiter?",
+  options: [
+    "Increase bass",
+    "Protect the loudspeaker/system from excessive level",
+    "Increase amplifier wattage",
+    "Remove cable resistance"
+  ],
+  answer: 1,
+  explanation:
+    "A limiter controls maximum signal level and helps protect loudspeaker drivers and amplifiers from excessive operating levels."
+},
+
+{
+  category: "Troubleshooting",
+  question: "A strong 50 Hz hum appears after connecting a laptop. What should be investigated first?",
+  options: [
+    "Replace loudspeakers",
+    "Increase DSP gain",
+    "Grounding, balanced connections and possible ground loop",
+    "Increase amplifier power"
+  ],
+  answer: 2,
+  explanation:
+    "50 Hz hum commonly indicates mains grounding or ground-loop problems. Check grounding and balanced signal paths first."
+},
+
+{
+  category: "System Design",
+  question: "A restaurant needs many ceiling speakers over long cable runs for uniform BGM. Which approach is generally most suitable?",
+  options: [
+    "Randomly parallel low-impedance speakers",
+    "70/100V distributed audio system",
+    "Headphone amplifier system",
+    "Direct microphone-to-speaker connection"
+  ],
+  answer: 1,
+  explanation:
+    "A constant-voltage distributed audio system is designed for multiple loudspeakers and long cable runs."
+},
+
+{
+  category: "Impedance Calculation",
+  question: "Four identical 8 ohm speakers are connected in parallel. What is the resulting nominal impedance?",
+  options: [
+    "32 ohm",
+    "16 ohm",
+    "8 ohm",
+    "2 ohm"
+  ],
+  answer: 3,
+  explanation:
+    "For identical loads in parallel: 8 ohm ÷ 4 speakers = 2 ohm."
+},
+
+{
+  category: "DSP Troubleshooting",
+  question: "DSP input meters show signal, but the DSP output meter shows nothing. What should be checked first?",
+  options: [
+    "Speaker cable",
+    "DSP routing, mute and output configuration",
+    "Amplifier AC supply",
+    "Speaker impedance"
+  ],
+  answer: 1,
+  explanation:
+    "Because the signal reaches the DSP input, first check internal DSP routing, mute states and output processing."
+},
+
+{
+  category: "Digital Audio",
+  question: "FOH is 30 m from the stage and a compatible digital stage box is available. What is the preferred approach?",
+  options: [
+    "Individual unbalanced cables",
+    "Manufacturer-supported digital stage-box/network connection",
+    "Speaker cable between mixer and stage box",
+    "Convert every channel to RCA"
+  ],
+  answer: 1,
+  explanation:
+    "Use the manufacturer's supported digital transport for multichannel audio between the console and stage box."
+},
+
+{
+  category: "Impedance Calculation",
+  question: "Four 8 ohm speakers are wired as two series pairs, with those two pairs then connected in parallel. What is the final impedance?",
+  options: [
+    "2 ohm",
+    "4 ohm",
+    "8 ohm",
+    "16 ohm"
+  ],
+  answer: 2,
+  explanation:
+    "Each series pair is 16 ohm. Two equal 16 ohm branches in parallel result in 8 ohm."
+},
+
+{
+  category: "100V Calculation",
+  question: "A 100V system has 8 speakers tapped at 20W and 4 speakers tapped at 40W. What is the total loudspeaker load?",
+  options: [
+    "160W",
+    "240W",
+    "320W",
+    "400W"
+  ],
+  answer: 2,
+  explanation:
+    "8 × 20W = 160W and 4 × 40W = 160W. Total speaker load = 320W."
+},
+
+{
+  category: "Amplifier Sizing",
+  question: "A distributed speaker load is 320W. With 20% amplifier headroom, what is the minimum calculated amplifier capacity?",
+  options: [
+    "320W",
+    "350W",
+    "384W",
+    "640W"
+  ],
+  answer: 2,
+  explanation:
+    "320W × 1.20 = 384W. Select the next appropriate real amplifier capacity at or above this requirement."
+},
+
+{
+  category: "Electrical Calculation",
+  question: "An AV rack draws approximately 10A from a 230V single-phase supply. What is the approximate apparent power?",
+  options: [
+    "0.23 kVA",
+    "1.0 kVA",
+    "2.3 kVA",
+    "23 kVA"
+  ],
+  answer: 2,
+  explanation:
+    "230V × 10A = 2300VA = approximately 2.3kVA."
+},
+
+{
+  category: "Amplifier Calculation",
+  question: "An amplifier delivers 800W into an 8 ohm resistive load. Approximately what RMS voltage corresponds to this?",
+  options: [
+    "40V",
+    "56.6V",
+    "80V",
+    "100V"
+  ],
+  answer: 2,
+  explanation:
+    "V = √(P × R). √(800 × 8) = √6400 = 80V RMS."
+},
+
+{
+  category: "Installation",
+  question: "Which rack and cabling practice is most appropriate?",
+  options: [
+    "Run AC and analogue audio tightly together",
+    "Maintain appropriate power/signal separation and organized cable management",
+    "Coil spare cable around amplifier ventilation",
+    "Leave cables unidentified"
+  ],
+  answer: 1,
+  explanation:
+    "Proper separation, labeling, cable management and clear amplifier ventilation improve reliability and serviceability."
+},
+
+{
+  category: "Commissioning",
+  question: "Before connecting a newly installed loudspeaker circuit to an amplifier, what should the engineer do?",
+  options: [
+    "Immediately test at full output",
+    "Verify wiring, load/impedance, polarity, shorts and amplifier configuration",
+    "Only visually inspect the speaker",
+    "Set amplifier gain fully clockwise"
+  ],
+  answer: 1,
+  explanation:
+    "Pre-power checks identify wiring, polarity and loading issues before equipment is energized."
+},
+
+{
+  category: "Site Troubleshooting",
+  question: "A loudspeaker line measures an unexpectedly very low resistance or possible short. What is the correct action?",
+  options: [
+    "Connect and test",
+    "Increase limiter",
+    "Keep it disconnected and trace the fault",
+    "Install a larger amplifier"
+  ],
+  answer: 2,
+  explanation:
+    "A suspected short must be found and corrected before the circuit is connected to an amplifier."
+},
+
+{
+  category: "Fault Diagnosis",
+  question: "Eight ceiling speakers share a system. Seven work normally but one has no output. Where should you investigate first?",
+  options: [
+    "Main DSP input",
+    "Mixer master output",
+    "Affected speaker, transformer tap and local wiring",
+    "Main amplifier AC supply"
+  ],
+  answer: 2,
+  explanation:
+    "Because the other seven speakers are working, shared upstream components are probably fine. Start at the isolated speaker branch."
+},
+
+{
+  category: "Gain Structure",
+  question: "A system is clean at low level but clips or distorts when volume is increased. What should a senior engineer evaluate first?",
+  options: [
+    "Gain structure, DSP limiting, amplifier clipping and system headroom",
+    "Rack colour",
+    "Mic cable length only",
+    "Internet bandwidth"
+  ],
+  answer: 0,
+  explanation:
+    "Trace the signal chain and identify where clipping begins. Also verify that the system has sufficient clean headroom."
+},
+
+{
+  category: "System Alignment",
+  question: "Tops and subs work independently but bass becomes weak when they play together near crossover. What is an important test?",
+  options: [
+    "Polarity/phase and crossover alignment",
+    "XLR connector colour",
+    "Increase mixer treble",
+    "Remove DSP"
+  ],
+  answer: 0,
+  explanation:
+    "Cancellation around the crossover region can result from polarity, timing or phase misalignment."
+},
+
+{
+  category: "Senior Engineering",
+  question: "A club says the system is not loud enough and asks for larger amplifiers. Existing amplifiers are correctly matched. What should be done first?",
+  options: [
+    "Immediately quote larger amplifiers",
+    "Set all gains to maximum",
+    "Measure gain structure, DSP/limiters, coverage, alignment, loading and actual SPL performance",
+    "Bypass protection limiters"
+  ],
+  answer: 2,
+  explanation:
+    "A senior engineer should diagnose the complete system before recommending hardware. More amplifier power does not fix poor coverage, bad alignment or incorrect gain structure."
+}
+
+];
+
+var SCORE = 0;
+var ANSWERED = {};
+
+function renderQuestions() {
+
+  var quiz = document.getElementById("quiz");
+  var html = "";
+
+  for (var i = 0; i < QUESTIONS.length; i++) {
+
+    var q = QUESTIONS[i];
+
+    html +=
+      '<section class="qcard ' +
+      (i === 0 ? 'active' : '') +
+      '" id="q' + i + '">';
+
+    html +=
+      '<div class="toprow">' +
+      '<span>Question ' + (i + 1) + ' of 20</span>' +
+      '<span class="cat">' + q.category + '</span>' +
+      '</div>';
+
+    html +=
+      '<div class="question">' +
+      q.question +
+      '</div>';
+
+    html += '<div class="options">';
+
+    for (var j = 0; j < q.options.length; j++) {
+
+      html +=
+        '<button type="button" class="option" ' +
+        'onclick="chooseAnswer(' + i + ',' + j + ',this)">' +
+        '<span class="letter">' +
+        String.fromCharCode(65 + j) +
+        '</span>' +
+        '<span>' +
+        q.options[j] +
+        '</span>' +
+        '</button>';
+
+    }
+
+    html += '</div>';
+
+    html +=
+      '<div class="feedback" id="fb' + i + '"></div>';
+
+    html +=
+      '<div class="nav">' +
+      '<button type="button" class="next" id="next' + i + '" ' +
+      'onclick="goNext(' + i + ')">' +
+      (i === 19 ? 'View Result' : 'Next Question') +
+      '</button>' +
+      '</div>';
+
+    html += '</section>';
+
+  }
+
+  quiz.innerHTML = html;
+}
+
+function chooseAnswer(questionIndex, optionIndex, button) {
+
+  if (ANSWERED[questionIndex]) {
+    return;
+  }
+
+  ANSWERED[questionIndex] = true;
+
+  var question = QUESTIONS[questionIndex];
+
+  var card =
+    document.getElementById("q" + questionIndex);
+
+  var buttons =
+    card.getElementsByClassName("option");
+
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].disabled = true;
+  }
+
+  var correctIndex =
+    question.answer;
+
+  var feedback =
+    document.getElementById("fb" + questionIndex);
+
+  if (optionIndex === correctIndex) {
+
+    SCORE++;
+
+    button.className += " correct";
+
+    feedback.className =
+      "feedback show good";
+
+    feedback.innerHTML =
+      "<b>Correct.</b><br><br>" +
+      question.explanation;
+
+  } else {
+
+    button.className += " wrong";
+
+    buttons[correctIndex].className +=
+      " correct";
+
+    feedback.className =
+      "feedback show bad";
+
+    feedback.innerHTML =
+      "<b>Incorrect.</b><br>" +
+      "Correct answer: <b>" +
+      String.fromCharCode(65 + correctIndex) +
+      ". " +
+      question.options[correctIndex] +
+      "</b><br><br>" +
+      question.explanation;
+
+  }
+
+  document
+    .getElementById("next" + questionIndex)
+    .className = "next show";
+}
+
+function goNext(questionIndex) {
+
+  document
+    .getElementById("q" + questionIndex)
+    .className = "qcard";
+
+  if (questionIndex < 19) {
+
+    document
+      .getElementById("q" + (questionIndex + 1))
+      .className = "qcard active";
+
+    var progress =
+      ((questionIndex + 2) / 20) * 100;
+
+    document
+      .getElementById("bar")
+      .style.width = progress + "%";
+
+    window.scrollTo(0, 0);
+
+  } else {
+
+    showResult();
+
+  }
+}
+
+function showResult() {
+  document.getElementById("bar").style.width = "100%";
+  var percentage = Math.round((SCORE / 20) * 100);
+  var passed = percentage >= 80;
+  var statusStr = passed ? "QUALIFIED" : "NOT QUALIFIED";
+
+  var result = document.getElementById("result");
+  result.className = "result show";
+
+  document.getElementById("scoreCircle").innerHTML = percentage + "%";
+
+  var status = document.getElementById("status");
+  status.innerHTML = statusStr;
+  status.className = passed ? "pass" : "fail";
+
+  document.getElementById("summary").innerHTML =
+    "<b>Candidate:</b> " + (CANDIDATE_DATA ? CANDIDATE_DATA.name : "N/A") + "<br>" +
+    "<b>Position:</b> " + (CANDIDATE_DATA ? CANDIDATE_DATA.position_applied : "N/A") + "<br><br>" +
+    "<b>" + SCORE + "/20 correct</b><br>" + (SCORE * 5) + "/100 marks<br><br>" +
+    (passed ? "Candidate has achieved the required minimum score of 80%." : "Minimum qualification is 80%, requiring at least 16 correct answers.");
+
+  saveResultToSupabase(percentage, statusStr);
+  window.scrollTo(0, 0);
+}
+
+function saveResultToSupabase(pct, statusStr) {
+  var syncBox = document.getElementById("syncStatus");
+  if (!syncBox) {
+    syncBox = document.createElement("div");
+    syncBox.id = "syncStatus";
+    document.getElementById("result").appendChild(syncBox);
+  }
+  syncBox.className = "sync-status saving";
+  syncBox.innerHTML = "Saving exam results to database...";
+
+  var payload = {
+    name: CANDIDATE_DATA ? CANDIDATE_DATA.name : "Unknown Candidate",
+    ph_no: CANDIDATE_DATA ? CANDIDATE_DATA.ph_no : "N/A",
+    email: CANDIDATE_DATA ? CANDIDATE_DATA.email : "N/A",
+    position_applied: CANDIDATE_DATA ? CANDIDATE_DATA.position_applied : "Senior AV Engineer",
+    exam_title: EXAM_TITLE,
+    marks_scored: SCORE * 5,
+    percentage: pct,
+    status: statusStr
+  };
+
+  fetch(SUPABASE_URL + "/rest/v1/exam_results", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_ANON_KEY,
+      "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+      "Prefer": "return=representation"
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(function(res) {
+    if (res.ok || res.status === 201) {
+      syncBox.className = "sync-status success";
+      syncBox.innerHTML = "✓ Exam result successfully saved to Supabase database.";
+    } else {
+      return res.json().then(function(errData) {
+        throw new Error(errData.message || ("HTTP " + res.status));
+      });
+    }
+  })
+  .catch(function(err) {
+    syncBox.className = "sync-status error";
+    syncBox.innerHTML = "⚠️ Result calculated locally. (Database Sync: " + err.message + ")";
+  });
+}
+</script>
+
+</body>
+</html>

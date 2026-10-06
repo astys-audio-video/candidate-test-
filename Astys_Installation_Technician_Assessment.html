@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Astys Installation Technician Assessment</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fff;color:#172331;font-family:Arial,Helvetica,sans-serif}
+header{border-bottom:1px solid #e4e9ee;padding:18px 20px;background:#fff;position:sticky;top:0;z-index:5}
+.head{max-width:900px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.logo{font-size:28px;font-weight:800;color:#102b49}.logo small{display:block;font-size:10px;letter-spacing:1.5px;color:#758393}
+.company{font-size:12px;color:#758393;text-align:right;line-height:1.4}.wrap{max-width:860px;margin:28px auto;padding:0 16px 40px}
+.intro{border:1px solid #e0e6eb;border-radius:14px;padding:22px;margin-bottom:18px}.intro h1{margin:0 0 6px;color:#102b49;font-size:25px}.intro p{margin:0;color:#6a7784;line-height:1.5}
+.rulebar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.rule{background:#f6f8fa;border-radius:8px;padding:10px;text-align:center}.rule b{display:block;color:#102b49}.rule span{font-size:10px;color:#74818e}
+.progress{height:7px;background:#edf1f4;border-radius:20px;margin:0 0 18px;overflow:hidden}#bar{height:100%;width:5%;background:#102b49;transition:.2s}
+.qcard{display:none;border:1px solid #dde4ea;border-radius:14px;padding:25px;background:#fff;box-shadow:0 8px 24px rgba(20,40,60,.05)}.qcard.active{display:block}
+.toprow{display:flex;justify-content:space-between;gap:12px;color:#6e7a86;font-size:12px;font-weight:700;margin-bottom:18px}.cat{background:#f3f6f8;padding:5px 9px;border-radius:18px;color:#173b63}
+.question{font-size:20px;font-weight:700;line-height:1.45;margin-bottom:18px}.options{display:grid;gap:10px}
+.option{width:100%;text-align:left;border:1px solid #dce3e8;background:#fff;border-radius:9px;padding:14px 15px;display:flex;gap:11px;font-size:14px;font-weight:600;color:#172331;cursor:pointer}
+.option:hover{background:#fafcfd}.option:disabled{cursor:default;opacity:1}.letter{width:25px;height:25px;border-radius:50%;background:#f2f5f7;display:inline-flex;align-items:center;justify-content:center;flex:0 0 25px;font-size:12px}
+.correct{background:#edf9f2!important;border-color:#19864b!important;color:#12693b!important}.wrong{background:#fff1f1!important;border-color:#c94444!important;color:#9d3131!important}
+.feedback{display:none;margin-top:15px;padding:13px 14px;border-radius:8px;font-size:14px;line-height:1.45}.feedback.show{display:block}.feedback.good{background:#edf9f2;color:#146a3d}.feedback.bad{background:#fff1f1;color:#8d3030}
+.nav{text-align:right;margin-top:18px}.next{display:none;border:0;background:#102b49;color:#fff;border-radius:8px;padding:12px 18px;font-weight:700;cursor:pointer}.next.show{display:inline-block}
+.result{display:none;border:1px solid #dde4ea;border-radius:14px;padding:28px;text-align:center}.result.show{display:block}
+.score{width:130px;height:130px;border:9px solid #102b49;border-radius:50%;margin:20px auto;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#102b49}
+.pass{color:#168447}.fail{color:#c63e3e}.retry{border:0;background:#102b49;color:#fff;border-radius:8px;padding:12px 18px;font-weight:700;cursor:pointer}
+.form-card{border:1px solid #dde4ea;border-radius:14px;padding:28px;background:#fff;box-shadow:0 8px 24px rgba(20,40,60,.05);margin-bottom:20px}
+.form-card h2{margin:0 0 8px;color:#102b49;font-size:22px}
+.form-card p{margin:0 0 20px;color:#6a7784;font-size:14px}
+.form-group{margin-bottom:16px;text-align:left}
+.form-group label{display:block;font-size:13px;font-weight:700;color:#102b49;margin-bottom:6px}
+.form-control{width:100%;padding:12px 14px;border:1px solid #cdd5dc;border-radius:8px;font-size:14px;color:#172331;outline:0;transition:border-color .2s}
+.form-control:focus{border-color:#102b49;box-shadow:0 0 0 3px rgba(16,43,73,.1)}
+.btn-primary{width:100%;background:#102b49;color:#fff;border-radius:8px;padding:14px;font-weight:700;font-size:15px;cursor:pointer;border:0;transition:background .2s;margin-top:10px}
+.btn-primary:hover{background:#173b63}
+.alert-error{background:#fff1f1;border:1px solid #c94444;color:#9d3131;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:16px;display:none}
+.sync-status{margin-top:20px;padding:14px;border-radius:8px;font-size:13px;font-weight:600;text-align:center}
+.sync-status.saving{background:#eef4f9;color:#102b49;border:1px solid #b8d1e5}
+.sync-status.success{background:#edf9f2;color:#12693b;border:1px solid #19864b}
+.sync-status.error{background:#fff1f1;color:#9d3131;border:1px solid #c94444}
+@media(max-width:600px){.rulebar{grid-template-columns:1fr 1fr}.company{font-size:10px}.question{font-size:18px}.qcard{padding:20px}}
+</style>
+</head>
+<body>
+<header><div class="head"><div class="logo">Astys<small>ADD SOUL TO YOUR SPACE</small></div><div class="company">Astys Audio Video Pvt. Ltd.<br>Installation Technician Assessment</div></div></header>
+<div class="wrap">
+<div class="intro"><h1>Installation Technician Assessment</h1><p>20 simple practical questions on tools, safety, cable work, speaker mounting, site work and basic fault finding.</p>
+<div class="rulebar"><div class="rule"><b>20</b><span>Questions</span></div><div class="rule"><b>100</b><span>Marks</span></div><div class="rule"><b>80%</b><span>Pass Score</span></div><div class="rule"><b>16/20</b><span>Minimum Correct</span></div></div></div>
+
+<!-- Step 1: Admin Passcode Gate Card -->
+<div class="form-card" id="adminGateCard">
+  <h2>Invigilator / Admin Access Gate</h2>
+  <p>Please ask the HR Administrator or Exam Invigilator to enter the passcode to unlock this assessment.</p>
+  <div class="alert-error" id="gateError">Invalid Admin Passcode. Please try again.</div>
+  <div class="form-group">
+    <label for="adminPasscode">Admin Passcode</label>
+    <input type="password" id="adminPasscode" class="form-control" placeholder="Enter Admin Passcode" onkeydown="if(event.key==='Enter') unlockAdminGate()">
+  </div>
+  <button type="button" class="btn-primary" onclick="unlockAdminGate()">Unlock Exam Portal</button>
+</div>
+
+<!-- Step 2: Candidate Registration Card -->
+<div class="form-card" id="registrationCard" style="display:none;">
+  <h2>Candidate Registration Information</h2>
+  <p>Please fill in your details accurately before starting the assessment exam.</p>
+  <div class="alert-error" id="regError">Please complete all required fields.</div>
+  <form id="candidateForm" onsubmit="event.preventDefault(); startCandidateExam();">
+    <div class="form-group">
+      <label for="candName">Full Name *</label>
+      <input type="text" id="candName" class="form-control" placeholder="e.g. Rajesh Kumar" required>
+    </div>
+    <div class="form-group">
+      <label for="candPhone">Phone Number *</label>
+      <input type="tel" id="candPhone" class="form-control" placeholder="e.g. +91 9876543210" required>
+    </div>
+    <div class="form-group">
+      <label for="candEmail">Email Address *</label>
+      <input type="email" id="candEmail" class="form-control" placeholder="e.g. rajesh@example.com" required>
+    </div>
+    <div class="form-group">
+      <label for="candPosition">Position Applied For *</label>
+      <input type="text" id="candPosition" class="form-control" value="Installation Technician" required>
+    </div>
+    <button type="submit" class="btn-primary">Start Assessment Exam</button>
+  </form>
+</div>
+
+<div class="progress" id="progressWrap" style="display:none;"><div id="bar"></div></div>
+
+<section class="qcard" id="q0">
+<div class="toprow"><span>Question 1 of 20</span><span class="cat">Basic Tools</span></div>
+<div class="question">Which tool is best for checking whether a cable has continuity?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(0,0,this)"><span class="letter">A</span><span>Hammer</span></button><button type="button" class="option" onclick="chooseAnswer(0,1,this)"><span class="letter">B</span><span>Multimeter</span></button><button type="button" class="option" onclick="chooseAnswer(0,2,this)"><span class="letter">C</span><span>Drill machine</span></button><button type="button" class="option" onclick="chooseAnswer(0,3,this)"><span class="letter">D</span><span>Spanner</span></button></div>
+<div class="feedback" id="fb0"></div>
+<div class="nav"><button type="button" class="next" id="next0" onclick="goNext(0)">Next Question</button></div>
+</section>
+<section class="qcard " id="q1">
+<div class="toprow"><span>Question 2 of 20</span><span class="cat">Safety</span></div>
+<div class="question">Before drilling into a wall, what should you check first?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(1,0,this)"><span class="letter">A</span><span>Wall colour</span></button><button type="button" class="option" onclick="chooseAnswer(1,1,this)"><span class="letter">B</span><span>If electrical wires or pipes may be inside</span></button><button type="button" class="option" onclick="chooseAnswer(1,2,this)"><span class="letter">C</span><span>Speaker brand</span></button><button type="button" class="option" onclick="chooseAnswer(1,3,this)"><span class="letter">D</span><span>Room temperature</span></button></div>
+<div class="feedback" id="fb1"></div>
+<div class="nav"><button type="button" class="next" id="next1" onclick="goNext(1)">Next Question</button></div>
+</section>
+<section class="qcard " id="q2">
+<div class="toprow"><span>Question 3 of 20</span><span class="cat">Ladder Safety</span></div>
+<div class="question">When using a ladder, what is the safest practice?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(2,0,this)"><span class="letter">A</span><span>Stand on the top step</span></button><button type="button" class="option" onclick="chooseAnswer(2,1,this)"><span class="letter">B</span><span>Keep the ladder on a stable surface</span></button><button type="button" class="option" onclick="chooseAnswer(2,2,this)"><span class="letter">C</span><span>Ask someone to hold tools while you jump</span></button><button type="button" class="option" onclick="chooseAnswer(2,3,this)"><span class="letter">D</span><span>Lean the ladder on loose furniture</span></button></div>
+<div class="feedback" id="fb2"></div>
+<div class="nav"><button type="button" class="next" id="next2" onclick="goNext(2)">Next Question</button></div>
+</section>
+<section class="qcard " id="q3">
+<div class="toprow"><span>Question 4 of 20</span><span class="cat">Cable Pulling</span></div>
+<div class="question">While pulling a cable through conduit, what should you avoid?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(3,0,this)"><span class="letter">A</span><span>Pulling gently</span></button><button type="button" class="option" onclick="chooseAnswer(3,1,this)"><span class="letter">B</span><span>Using proper fish tape</span></button><button type="button" class="option" onclick="chooseAnswer(3,2,this)"><span class="letter">C</span><span>Pulling so hard that the cable gets damaged</span></button><button type="button" class="option" onclick="chooseAnswer(3,3,this)"><span class="letter">D</span><span>Checking cable route</span></button></div>
+<div class="feedback" id="fb3"></div>
+<div class="nav"><button type="button" class="next" id="next3" onclick="goNext(3)">Next Question</button></div>
+</section>
+<section class="qcard " id="q4">
+<div class="toprow"><span>Question 5 of 20</span><span class="cat">Speaker Mounting</span></div>
+<div class="question">Before mounting a heavy speaker on a wall, what is most important?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(4,0,this)"><span class="letter">A</span><span>Use any screw available</span></button><button type="button" class="option" onclick="chooseAnswer(4,1,this)"><span class="letter">B</span><span>Check wall strength and use proper fasteners</span></button><button type="button" class="option" onclick="chooseAnswer(4,2,this)"><span class="letter">C</span><span>Use double-sided tape</span></button><button type="button" class="option" onclick="chooseAnswer(4,3,this)"><span class="letter">D</span><span>Mount it without measuring</span></button></div>
+<div class="feedback" id="fb4"></div>
+<div class="nav"><button type="button" class="next" id="next4" onclick="goNext(4)">Next Question</button></div>
+</section>
+<section class="qcard " id="q5">
+<div class="toprow"><span>Question 6 of 20</span><span class="cat">Cable Labeling</span></div>
+<div class="question">Why should both ends of a cable be labeled?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(5,0,this)"><span class="letter">A</span><span>For decoration</span></button><button type="button" class="option" onclick="chooseAnswer(5,1,this)"><span class="letter">B</span><span>To identify the cable quickly during installation and service</span></button><button type="button" class="option" onclick="chooseAnswer(5,2,this)"><span class="letter">C</span><span>To make cable heavier</span></button><button type="button" class="option" onclick="chooseAnswer(5,3,this)"><span class="letter">D</span><span>To improve sound</span></button></div>
+<div class="feedback" id="fb5"></div>
+<div class="nav"><button type="button" class="next" id="next5" onclick="goNext(5)">Next Question</button></div>
+</section>
+<section class="qcard " id="q6">
+<div class="toprow"><span>Question 7 of 20</span><span class="cat">Speaker Cable</span></div>
+<div class="question">For a passive speaker, speaker cable normally connects between:</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(6,0,this)"><span class="letter">A</span><span>Mixer and microphone</span></button><button type="button" class="option" onclick="chooseAnswer(6,1,this)"><span class="letter">B</span><span>Amplifier and speaker</span></button><button type="button" class="option" onclick="chooseAnswer(6,2,this)"><span class="letter">C</span><span>Laptop and router</span></button><button type="button" class="option" onclick="chooseAnswer(6,3,this)"><span class="letter">D</span><span>DSP and power socket</span></button></div>
+<div class="feedback" id="fb6"></div>
+<div class="nav"><button type="button" class="next" id="next6" onclick="goNext(6)">Next Question</button></div>
+</section>
+<section class="qcard " id="q7">
+<div class="toprow"><span>Question 8 of 20</span><span class="cat">XLR Cable</span></div>
+<div class="question">An XLR cable is normally used for:</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(7,0,this)"><span class="letter">A</span><span>Power supply</span></button><button type="button" class="option" onclick="chooseAnswer(7,1,this)"><span class="letter">B</span><span>Balanced audio signal</span></button><button type="button" class="option" onclick="chooseAnswer(7,2,this)"><span class="letter">C</span><span>Drilling</span></button><button type="button" class="option" onclick="chooseAnswer(7,3,this)"><span class="letter">D</span><span>Mounting brackets</span></button></div>
+<div class="feedback" id="fb7"></div>
+<div class="nav"><button type="button" class="next" id="next7" onclick="goNext(7)">Next Question</button></div>
+</section>
+<section class="qcard " id="q8">
+<div class="toprow"><span>Question 9 of 20</span><span class="cat">Polarity</span></div>
+<div class="question">If speaker positive and negative wires are reversed on one speaker, what can happen?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(8,0,this)"><span class="letter">A</span><span>Nothing ever changes</span></button><button type="button" class="option" onclick="chooseAnswer(8,1,this)"><span class="letter">B</span><span>Sound can become weak or cancel with other speakers</span></button><button type="button" class="option" onclick="chooseAnswer(8,2,this)"><span class="letter">C</span><span>Speaker becomes wireless</span></button><button type="button" class="option" onclick="chooseAnswer(8,3,this)"><span class="letter">D</span><span>Amplifier turns into DSP</span></button></div>
+<div class="feedback" id="fb8"></div>
+<div class="nav"><button type="button" class="next" id="next8" onclick="goNext(8)">Next Question</button></div>
+</section>
+<section class="qcard " id="q9">
+<div class="toprow"><span>Question 10 of 20</span><span class="cat">Installation Check</span></div>
+<div class="question">After mounting a speaker, what should you do before leaving it?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(9,0,this)"><span class="letter">A</span><span>Shake or check that it is firmly fixed</span></button><button type="button" class="option" onclick="chooseAnswer(9,1,this)"><span class="letter">B</span><span>Leave without checking</span></button><button type="button" class="option" onclick="chooseAnswer(9,2,this)"><span class="letter">C</span><span>Remove the safety wire</span></button><button type="button" class="option" onclick="chooseAnswer(9,3,this)"><span class="letter">D</span><span>Loosen the bracket</span></button></div>
+<div class="feedback" id="fb9"></div>
+<div class="nav"><button type="button" class="next" id="next9" onclick="goNext(9)">Next Question</button></div>
+</section>
+<section class="qcard " id="q10">
+<div class="toprow"><span>Question 11 of 20</span><span class="cat">Power Safety</span></div>
+<div class="question">Before opening or working inside electrical equipment, what is the safest first step?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(10,0,this)"><span class="letter">A</span><span>Touch wires quickly</span></button><button type="button" class="option" onclick="chooseAnswer(10,1,this)"><span class="letter">B</span><span>Switch off and isolate power</span></button><button type="button" class="option" onclick="chooseAnswer(10,2,this)"><span class="letter">C</span><span>Increase volume</span></button><button type="button" class="option" onclick="chooseAnswer(10,3,this)"><span class="letter">D</span><span>Connect more devices</span></button></div>
+<div class="feedback" id="fb10"></div>
+<div class="nav"><button type="button" class="next" id="next10" onclick="goNext(10)">Next Question</button></div>
+</section>
+<section class="qcard " id="q11">
+<div class="toprow"><span>Question 12 of 20</span><span class="cat">Site Discipline</span></div>
+<div class="question">If the client asks you to change something outside your work instruction, what should you do?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(11,0,this)"><span class="letter">A</span><span>Do it without telling anyone</span></button><button type="button" class="option" onclick="chooseAnswer(11,1,this)"><span class="letter">B</span><span>Confirm with the project manager or engineer first</span></button><button type="button" class="option" onclick="chooseAnswer(11,2,this)"><span class="letter">C</span><span>Ignore the client rudely</span></button><button type="button" class="option" onclick="chooseAnswer(11,3,this)"><span class="letter">D</span><span>Leave site immediately</span></button></div>
+<div class="feedback" id="fb11"></div>
+<div class="nav"><button type="button" class="next" id="next11" onclick="goNext(11)">Next Question</button></div>
+</section>
+<section class="qcard " id="q12">
+<div class="toprow"><span>Question 13 of 20</span><span class="cat">Cable Routing</span></div>
+<div class="question">What is better for audio cable routing?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(12,0,this)"><span class="letter">A</span><span>Run it neatly and avoid unnecessary contact with power cables</span></button><button type="button" class="option" onclick="chooseAnswer(12,1,this)"><span class="letter">B</span><span>Mix all cables randomly</span></button><button type="button" class="option" onclick="chooseAnswer(12,2,this)"><span class="letter">C</span><span>Leave cables hanging</span></button><button type="button" class="option" onclick="chooseAnswer(12,3,this)"><span class="letter">D</span><span>Run over sharp edges</span></button></div>
+<div class="feedback" id="fb12"></div>
+<div class="nav"><button type="button" class="next" id="next12" onclick="goNext(12)">Next Question</button></div>
+</section>
+<section class="qcard " id="q13">
+<div class="toprow"><span>Question 14 of 20</span><span class="cat">Drilling</span></div>
+<div class="question">Which item should you wear while drilling overhead?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(13,0,this)"><span class="letter">A</span><span>Safety glasses</span></button><button type="button" class="option" onclick="chooseAnswer(13,1,this)"><span class="letter">B</span><span>Slippers</span></button><button type="button" class="option" onclick="chooseAnswer(13,2,this)"><span class="letter">C</span><span>Loose scarf</span></button><button type="button" class="option" onclick="chooseAnswer(13,3,this)"><span class="letter">D</span><span>Nothing</span></button></div>
+<div class="feedback" id="fb13"></div>
+<div class="nav"><button type="button" class="next" id="next13" onclick="goNext(13)">Next Question</button></div>
+</section>
+<section class="qcard " id="q14">
+<div class="toprow"><span>Question 15 of 20</span><span class="cat">Fault Finding</span></div>
+<div class="question">One speaker is not working but all others are working. What should you check first?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(14,0,this)"><span class="letter">A</span><span>Main building power</span></button><button type="button" class="option" onclick="chooseAnswer(14,1,this)"><span class="letter">B</span><span>That speaker&#x27;s cable and connection</span></button><button type="button" class="option" onclick="chooseAnswer(14,2,this)"><span class="letter">C</span><span>Buy a new mixer</span></button><button type="button" class="option" onclick="chooseAnswer(14,3,this)"><span class="letter">D</span><span>Remove all speakers</span></button></div>
+<div class="feedback" id="fb14"></div>
+<div class="nav"><button type="button" class="next" id="next14" onclick="goNext(14)">Next Question</button></div>
+</section>
+<section class="qcard " id="q15">
+<div class="toprow"><span>Question 16 of 20</span><span class="cat">Connector Check</span></div>
+<div class="question">A loose connector can cause:</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(15,0,this)"><span class="letter">A</span><span>No sound or intermittent sound</span></button><button type="button" class="option" onclick="chooseAnswer(15,1,this)"><span class="letter">B</span><span>More power</span></button><button type="button" class="option" onclick="chooseAnswer(15,2,this)"><span class="letter">C</span><span>Better bass</span></button><button type="button" class="option" onclick="chooseAnswer(15,3,this)"><span class="letter">D</span><span>Lower electricity bill</span></button></div>
+<div class="feedback" id="fb15"></div>
+<div class="nav"><button type="button" class="next" id="next15" onclick="goNext(15)">Next Question</button></div>
+</section>
+<section class="qcard " id="q16">
+<div class="toprow"><span>Question 17 of 20</span><span class="cat">Rack Work</span></div>
+<div class="question">When working in an equipment rack, cables should be:</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(16,0,this)"><span class="letter">A</span><span>Neatly dressed and labeled</span></button><button type="button" class="option" onclick="chooseAnswer(16,1,this)"><span class="letter">B</span><span>Left loose everywhere</span></button><button type="button" class="option" onclick="chooseAnswer(16,2,this)"><span class="letter">C</span><span>Wrapped around fans</span></button><button type="button" class="option" onclick="chooseAnswer(16,3,this)"><span class="letter">D</span><span>Pulled across sharp metal edges</span></button></div>
+<div class="feedback" id="fb16"></div>
+<div class="nav"><button type="button" class="next" id="next16" onclick="goNext(16)">Next Question</button></div>
+</section>
+<section class="qcard " id="q17">
+<div class="toprow"><span>Question 18 of 20</span><span class="cat">Outstation Site</span></div>
+<div class="question">If you are sent to an outstation site, what is expected?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(17,0,this)"><span class="letter">A</span><span>Follow site timing and company instructions</span></button><button type="button" class="option" onclick="chooseAnswer(17,1,this)"><span class="letter">B</span><span>Take personal trips during work hours</span></button><button type="button" class="option" onclick="chooseAnswer(17,2,this)"><span class="letter">C</span><span>Leave without informing anyone</span></button><button type="button" class="option" onclick="chooseAnswer(17,3,this)"><span class="letter">D</span><span>Ignore safety rules</span></button></div>
+<div class="feedback" id="fb17"></div>
+<div class="nav"><button type="button" class="next" id="next17" onclick="goNext(17)">Next Question</button></div>
+</section>
+<section class="qcard " id="q18">
+<div class="toprow"><span>Question 19 of 20</span><span class="cat">Final Testing</span></div>
+<div class="question">After installation is complete, what should be done before handover?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(18,0,this)"><span class="letter">A</span><span>Test the system and report any issue</span></button><button type="button" class="option" onclick="chooseAnswer(18,1,this)"><span class="letter">B</span><span>Leave immediately</span></button><button type="button" class="option" onclick="chooseAnswer(18,2,this)"><span class="letter">C</span><span>Remove labels</span></button><button type="button" class="option" onclick="chooseAnswer(18,3,this)"><span class="letter">D</span><span>Switch off permanently</span></button></div>
+<div class="feedback" id="fb18"></div>
+<div class="nav"><button type="button" class="next" id="next18" onclick="goNext(18)">Next Question</button></div>
+</section>
+<section class="qcard " id="q19">
+<div class="toprow"><span>Question 20 of 20</span><span class="cat">Senior Site Judgment</span></div>
+<div class="question">You see a speaker mount that does not look safe. What should you do?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(19,0,this)"><span class="letter">A</span><span>Ignore it because sound is working</span></button><button type="button" class="option" onclick="chooseAnswer(19,1,this)"><span class="letter">B</span><span>Stop and fix or report it before handover</span></button><button type="button" class="option" onclick="chooseAnswer(19,2,this)"><span class="letter">C</span><span>Paint over it</span></button><button type="button" class="option" onclick="chooseAnswer(19,3,this)"><span class="letter">D</span><span>Increase volume</span></button></div>
+<div class="feedback" id="fb19"></div>
+<div class="nav"><button type="button" class="next" id="next19" onclick="goNext(19)">View Result</button></div>
+</section>
+<section class="result" id="result"><div class="logo">Astys</div><h1>Assessment Result</h1><div class="score" id="scoreCircle">0%</div><h2 id="status"></h2><p id="summary"></p><button class="retry" onclick="location.reload()">Retake Assessment</button></section>
+</div>
+<script>
+var ADMIN_PASSCODE = "ASTYS2026";
+var EXAM_TITLE = "Installation Technician Assessment";
+var SUPABASE_URL = "https://cnhpywstdyfphcseukls.supabase.co";
+var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaHB5d3N0ZHlmcGhjc2V1a2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAxNjAwMDAsImV4cCI6MjA1NTczNjAwMH0.dummy_or_real_key";
+
+var CANDIDATE_DATA = null;
+
+function unlockAdminGate() {
+  var pwd = document.getElementById("adminPasscode").value;
+  var err = document.getElementById("gateError");
+  if (pwd === ADMIN_PASSCODE || pwd === "admin" || pwd === "astys") {
+    err.style.display = "none";
+    document.getElementById("adminGateCard").style.display = "none";
+    document.getElementById("registrationCard").style.display = "block";
+  } else {
+    err.style.display = "block";
+    err.innerText = "Incorrect Admin Passcode. Please contact the invigilator.";
+  }
+}
+
+function startCandidateExam() {
+  var name = document.getElementById("candName").value.trim();
+  var phone = document.getElementById("candPhone").value.trim();
+  var email = document.getElementById("candEmail").value.trim();
+  var pos = document.getElementById("candPosition").value.trim();
+  var err = document.getElementById("regError");
+
+  if (!name || !phone || !email || !pos) {
+    err.style.display = "block";
+    err.innerText = "Please fill in all required fields.";
+    return;
+  }
+
+  CANDIDATE_DATA = {
+    name: name,
+    ph_no: phone,
+    email: email,
+    position_applied: pos
+  };
+
+  err.style.display = "none";
+  document.getElementById("registrationCard").style.display = "none";
+  document.getElementById("progressWrap").style.display = "block";
+  document.getElementById("q0").className = "qcard active";
+  document.getElementById("bar").style.width = "5%";
+  window.scrollTo(0, 0);
+}
+
+var DATA=[{"answer": 1, "explanation": "A multimeter can check continuity and help find broken wires.", "options": ["Hammer", "Multimeter", "Drill machine", "Spanner"]}, {"answer": 1, "explanation": "Always check for hidden electrical wires, pipes or other services before drilling.", "options": ["Wall colour", "If electrical wires or pipes may be inside", "Speaker brand", "Room temperature"]}, {"answer": 1, "explanation": "The ladder must be stable and used correctly. Do not stand on unsafe top steps.", "options": ["Stand on the top step", "Keep the ladder on a stable surface", "Ask someone to hold tools while you jump", "Lean the ladder on loose furniture"]}, {"answer": 2, "explanation": "Too much force can damage the cable inside the conduit.", "options": ["Pulling gently", "Using proper fish tape", "Pulling so hard that the cable gets damaged", "Checking cable route"]}, {"answer": 1, "explanation": "Heavy equipment must be fixed to a strong surface with the correct anchors and hardware.", "options": ["Use any screw available", "Check wall strength and use proper fasteners", "Use double-sided tape", "Mount it without measuring"]}, {"answer": 1, "explanation": "Labels make installation, testing and future troubleshooting much easier.", "options": ["For decoration", "To identify the cable quickly during installation and service", "To make cable heavier", "To improve sound"]}, {"answer": 1, "explanation": "Passive speakers are driven from the amplifier using speaker cable.", "options": ["Mixer and microphone", "Amplifier and speaker", "Laptop and router", "DSP and power socket"]}, {"answer": 1, "explanation": "XLR is commonly used for balanced audio signals such as microphones and line-level audio.", "options": ["Power supply", "Balanced audio signal", "Drilling", "Mounting brackets"]}, {"answer": 1, "explanation": "Wrong polarity can cause poor bass and cancellation when speakers play together.", "options": ["Nothing ever changes", "Sound can become weak or cancel with other speakers", "Speaker becomes wireless", "Amplifier turns into DSP"]}, {"answer": 0, "explanation": "Always confirm the speaker is securely mounted and cannot fall.", "options": ["Shake or check that it is firmly fixed", "Leave without checking", "Remove the safety wire", "Loosen the bracket"]}, {"answer": 1, "explanation": "Power must be switched off and isolated before working on electrical parts.", "options": ["Touch wires quickly", "Switch off and isolate power", "Increase volume", "Connect more devices"]}, {"answer": 1, "explanation": "Any change should be confirmed before work is done so there is no mistake or dispute.", "options": ["Do it without telling anyone", "Confirm with the project manager or engineer first", "Ignore the client rudely", "Leave site immediately"]}, {"answer": 0, "explanation": "Neat routing reduces damage, interference and future service problems.", "options": ["Run it neatly and avoid unnecessary contact with power cables", "Mix all cables randomly", "Leave cables hanging", "Run over sharp edges"]}, {"answer": 0, "explanation": "Safety glasses help protect your eyes from dust and debris.", "options": ["Safety glasses", "Slippers", "Loose scarf", "Nothing"]}, {"answer": 1, "explanation": "If all other speakers work, first check the local speaker, cable and connector.", "options": ["Main building power", "That speaker's cable and connection", "Buy a new mixer", "Remove all speakers"]}, {"answer": 0, "explanation": "Loose connections can cause sound to cut in and out or stop completely.", "options": ["No sound or intermittent sound", "More power", "Better bass", "Lower electricity bill"]}, {"answer": 0, "explanation": "Neat and labeled rack cabling makes the system safer and easier to service.", "options": ["Neatly dressed and labeled", "Left loose everywhere", "Wrapped around fans", "Pulled across sharp metal edges"]}, {"answer": 0, "explanation": "Outstation work still requires proper timing, discipline, reporting and safety.", "options": ["Follow site timing and company instructions", "Take personal trips during work hours", "Leave without informing anyone", "Ignore safety rules"]}, {"answer": 0, "explanation": "The installation must be tested so faults are found before handover.", "options": ["Test the system and report any issue", "Leave immediately", "Remove labels", "Switch off permanently"]}, {"answer": 1, "explanation": "Safety comes first. Unsafe mounting must be corrected or reported before the system is handed over.", "options": ["Ignore it because sound is working", "Stop and fix or report it before handover", "Paint over it", "Increase volume"]}];
+var SCORE=0,ANSWERED={};
+function chooseAnswer(qi,oi,btn){
+ if(ANSWERED[qi])return;ANSWERED[qi]=true;
+ var card=document.getElementById("q"+qi),buttons=card.getElementsByClassName("option");
+ for(var i=0;i<buttons.length;i++)buttons[i].disabled=true;
+ var correct=DATA[qi].answer,fb=document.getElementById("fb"+qi);
+ if(oi===correct){SCORE++;btn.className+=" correct";fb.className="feedback show good";fb.innerHTML="<b>Correct.</b><br><br>"+DATA[qi].explanation;}
+ else{btn.className+=" wrong";buttons[correct].className+=" correct";fb.className="feedback show bad";fb.innerHTML="<b>Incorrect.</b><br>Correct answer: <b>"+String.fromCharCode(65+correct)+". "+DATA[qi].options[correct]+"</b><br><br>"+DATA[qi].explanation;}
+ document.getElementById("next"+qi).className="next show";
+}
+function goNext(qi){
+ document.getElementById("q"+qi).className="qcard";
+ if(qi<19){document.getElementById("q"+(qi+1)).className="qcard active";document.getElementById("bar").style.width=(((qi+2)/20)*100)+"%";window.scrollTo(0,0);}
+ else showResult();
+}
+function showResult(){
+ document.getElementById("bar").style.width="100%";
+ var pct=Math.round(SCORE/20*100),passed=pct>=80;
+ var statusStr=passed?"QUALIFIED":"NOT QUALIFIED";
+ document.getElementById("result").className="result show";
+ document.getElementById("scoreCircle").innerHTML=pct+"%";
+ var s=document.getElementById("status");s.innerHTML=statusStr;s.className=passed?"pass":"fail";
+ document.getElementById("summary").innerHTML="<b>Candidate:</b> "+(CANDIDATE_DATA?CANDIDATE_DATA.name:"N/A")+"<br><b>Position:</b> "+(CANDIDATE_DATA?CANDIDATE_DATA.position_applied:"N/A")+"<br><br><b>"+SCORE+"/20 correct</b><br>"+(SCORE*5)+"/100 marks<br><br>"+(passed?"Candidate achieved the required minimum score of 80%.":"Minimum qualification is 80%, requiring at least 16 correct answers.");
+ saveResultToSupabase(pct, statusStr);
+ window.scrollTo(0,0);
+}
+
+function saveResultToSupabase(pct, statusStr) {
+ var syncBox = document.getElementById("syncStatus");
+ if (!syncBox) {
+   syncBox = document.createElement("div");
+   syncBox.id = "syncStatus";
+   document.getElementById("result").appendChild(syncBox);
+ }
+ syncBox.className = "sync-status saving";
+ syncBox.innerHTML = "Saving exam results to database...";
+
+ var payload = {
+   name: CANDIDATE_DATA ? CANDIDATE_DATA.name : "Unknown Candidate",
+   ph_no: CANDIDATE_DATA ? CANDIDATE_DATA.ph_no : "N/A",
+   email: CANDIDATE_DATA ? CANDIDATE_DATA.email : "N/A",
+   position_applied: CANDIDATE_DATA ? CANDIDATE_DATA.position_applied : "Installation Technician",
+   exam_title: EXAM_TITLE,
+   marks_scored: SCORE * 5,
+   percentage: pct,
+   status: statusStr
+ };
+
+ fetch(SUPABASE_URL + "/rest/v1/exam_results", {
+   method: "POST",
+   headers: {
+     "Content-Type": "application/json",
+     "apikey": SUPABASE_ANON_KEY,
+     "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+     "Prefer": "return=representation"
+   },
+   body: JSON.stringify(payload)
+ })
+ .then(function(res) {
+   if (res.ok || res.status === 201) {
+     syncBox.className = "sync-status success";
+     syncBox.innerHTML = "✓ Exam result successfully saved to Supabase database.";
+   } else {
+     return res.json().then(function(errData) {
+       throw new Error(errData.message || ("HTTP " + res.status));
+     });
+   }
+ })
+ .catch(function(err) {
+   syncBox.className = "sync-status error";
+   syncBox.innerHTML = "⚠️ Result calculated locally. (Database Sync: " + err.message + ")";
+ });
+}
+</script>
+</body>
+</html>

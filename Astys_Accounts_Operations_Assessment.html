@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Astys Accounts Assessment</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fff;color:#172331;font-family:Arial,Helvetica,sans-serif}
+header{border-bottom:1px solid #e4e9ee;padding:18px 20px;background:#fff;position:sticky;top:0;z-index:5}
+.head{max-width:900px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.logo{font-size:28px;font-weight:800;color:#102b49}.logo small{display:block;font-size:10px;letter-spacing:1.5px;color:#758393}
+.company{font-size:12px;color:#758393;text-align:right;line-height:1.4}.wrap{max-width:860px;margin:28px auto;padding:0 16px 40px}
+.intro{border:1px solid #e0e6eb;border-radius:14px;padding:22px;margin-bottom:18px}.intro h1{margin:0 0 6px;color:#102b49;font-size:25px}.intro p{margin:0;color:#6a7784;line-height:1.5}
+.rulebar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.rule{background:#f6f8fa;border-radius:8px;padding:10px;text-align:center}.rule b{display:block;color:#102b49}.rule span{font-size:10px;color:#74818e}
+.progress{height:7px;background:#edf1f4;border-radius:20px;margin:0 0 18px;overflow:hidden}#bar{height:100%;width:5%;background:#102b49;transition:.2s}
+.qcard{display:none;border:1px solid #dde4ea;border-radius:14px;padding:25px;background:#fff;box-shadow:0 8px 24px rgba(20,40,60,.05)}.qcard.active{display:block}
+.toprow{display:flex;justify-content:space-between;gap:12px;color:#6e7a86;font-size:12px;font-weight:700;margin-bottom:18px}.cat{background:#f3f6f8;padding:5px 9px;border-radius:18px;color:#173b63}
+.question{font-size:20px;font-weight:700;line-height:1.45;margin-bottom:18px}.options{display:grid;gap:10px}
+.option{width:100%;text-align:left;border:1px solid #dce3e8;background:#fff;border-radius:9px;padding:14px 15px;display:flex;gap:11px;font-size:14px;font-weight:600;color:#172331;cursor:pointer}
+.option:hover{background:#fafcfd}.option:disabled{cursor:default;opacity:1}.letter{width:25px;height:25px;border-radius:50%;background:#f2f5f7;display:inline-flex;align-items:center;justify-content:center;flex:0 0 25px;font-size:12px}
+.correct{background:#edf9f2!important;border-color:#19864b!important;color:#12693b!important}.wrong{background:#fff1f1!important;border-color:#c94444!important;color:#9d3131!important}
+.feedback{display:none;margin-top:15px;padding:13px 14px;border-radius:8px;font-size:14px;line-height:1.45}.feedback.show{display:block}.feedback.good{background:#edf9f2;color:#146a3d}.feedback.bad{background:#fff1f1;color:#8d3030}
+.nav{text-align:right;margin-top:18px}.next{display:none;border:0;background:#102b49;color:#fff;border-radius:8px;padding:12px 18px;font-weight:700;cursor:pointer}.next.show{display:inline-block}
+.result{display:none;border:1px solid #dde4ea;border-radius:14px;padding:28px;text-align:center}.result.show{display:block}
+.score{width:130px;height:130px;border:9px solid #102b49;border-radius:50%;margin:20px auto;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#102b49}
+.pass{color:#168447}.fail{color:#c63e3e}.retry{border:0;background:#102b49;color:#fff;border-radius:8px;padding:12px 18px;font-weight:700;cursor:pointer}
+.form-card{border:1px solid #dde4ea;border-radius:14px;padding:28px;background:#fff;box-shadow:0 8px 24px rgba(20,40,60,.05);margin-bottom:20px}
+.form-card h2{margin:0 0 8px;color:#102b49;font-size:22px}
+.form-card p{margin:0 0 20px;color:#6a7784;font-size:14px}
+.form-group{margin-bottom:16px;text-align:left}
+.form-group label{display:block;font-size:13px;font-weight:700;color:#102b49;margin-bottom:6px}
+.form-control{width:100%;padding:12px 14px;border:1px solid #cdd5dc;border-radius:8px;font-size:14px;color:#172331;outline:0;transition:border-color .2s}
+.form-control:focus{border-color:#102b49;box-shadow:0 0 0 3px rgba(16,43,73,.1)}
+.btn-primary{width:100%;background:#102b49;color:#fff;border-radius:8px;padding:14px;font-weight:700;font-size:15px;cursor:pointer;border:0;transition:background .2s;margin-top:10px}
+.btn-primary:hover{background:#173b63}
+.alert-error{background:#fff1f1;border:1px solid #c94444;color:#9d3131;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:16px;display:none}
+.sync-status{margin-top:20px;padding:14px;border-radius:8px;font-size:13px;font-weight:600;text-align:center}
+.sync-status.saving{background:#eef4f9;color:#102b49;border:1px solid #b8d1e5}
+.sync-status.success{background:#edf9f2;color:#12693b;border:1px solid #19864b}
+.sync-status.error{background:#fff1f1;color:#9d3131;border:1px solid #c94444}
+@media(max-width:600px){.rulebar{grid-template-columns:1fr 1fr}.company{font-size:10px}.question{font-size:18px}.qcard{padding:20px}}
+</style></head>
+<body>
+<header><div class="head"><div class="logo">Astys<small>ADD SOUL TO YOUR SPACE</small></div><div class="company">Astys Audio Video Pvt. Ltd.<br>Accounts & Operations Assessment</div></div></header>
+<div class="wrap">
+<div class="intro"><h1>Accounts & Operations Executive Assessment</h1><p>20 practical questions covering accounts, GST, vendor/client ledgers, project costing, purchase control, inventory and operations.</p>
+<div class="rulebar"><div class="rule"><b>20</b><span>Questions</span></div><div class="rule"><b>100</b><span>Marks</span></div><div class="rule"><b>80%</b><span>Pass Score</span></div><div class="rule"><b>16/20</b><span>Minimum Correct</span></div></div></div>
+
+<!-- Step 1: Admin Passcode Gate Card -->
+<div class="form-card" id="adminGateCard">
+  <h2>Invigilator / Admin Access Gate</h2>
+  <p>Please ask the HR Administrator or Exam Invigilator to enter the passcode to unlock this assessment.</p>
+  <div class="alert-error" id="gateError">Invalid Admin Passcode. Please try again.</div>
+  <div class="form-group">
+    <label for="adminPasscode">Admin Passcode</label>
+    <input type="password" id="adminPasscode" class="form-control" placeholder="Enter Admin Passcode" onkeydown="if(event.key==='Enter') unlockAdminGate()">
+  </div>
+  <button type="button" class="btn-primary" onclick="unlockAdminGate()">Unlock Exam Portal</button>
+</div>
+
+<!-- Step 2: Candidate Registration Card -->
+<div class="form-card" id="registrationCard" style="display:none;">
+  <h2>Candidate Registration Information</h2>
+  <p>Please fill in your details accurately before starting the assessment exam.</p>
+  <div class="alert-error" id="regError">Please complete all required fields.</div>
+  <form id="candidateForm" onsubmit="event.preventDefault(); startCandidateExam();">
+    <div class="form-group">
+      <label for="candName">Full Name *</label>
+      <input type="text" id="candName" class="form-control" placeholder="e.g. Priya Sharma" required>
+    </div>
+    <div class="form-group">
+      <label for="candPhone">Phone Number *</label>
+      <input type="tel" id="candPhone" class="form-control" placeholder="e.g. +91 9876543210" required>
+    </div>
+    <div class="form-group">
+      <label for="candEmail">Email Address *</label>
+      <input type="email" id="candEmail" class="form-control" placeholder="e.g. priya@example.com" required>
+    </div>
+    <div class="form-group">
+      <label for="candPosition">Position Applied For *</label>
+      <input type="text" id="candPosition" class="form-control" value="Accounts & Operations Executive" required>
+    </div>
+    <button type="submit" class="btn-primary">Start Assessment Exam</button>
+  </form>
+</div>
+
+<div class="progress" id="progressWrap" style="display:none;"><div id="bar"></div></div>
+
+<section class="qcard" id="q0">
+<div class="toprow"><span>Question 1 of 20</span><span class="cat">Accounting Basics</span></div>
+<div class="question">A client invoice is raised for ₹1,18,000 including 18% GST. What is the taxable value before GST?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(0,0,this)"><span class="letter">A</span><span>₹1,00,000</span></button><button type="button" class="option" onclick="chooseAnswer(0,1,this)"><span class="letter">B</span><span>₹98,360</span></button><button type="button" class="option" onclick="chooseAnswer(0,2,this)"><span class="letter">C</span><span>₹1,18,000</span></button><button type="button" class="option" onclick="chooseAnswer(0,3,this)"><span class="letter">D</span><span>₹96,760</span></button></div>
+<div class="feedback" id="fb0"></div>
+<div class="nav"><button type="button" class="next" id="next0" onclick="goNext(0)">Next Question</button></div>
+</section>
+<section class="qcard " id="q1">
+<div class="toprow"><span>Question 2 of 20</span><span class="cat">GST</span></div>
+<div class="question">A purchase invoice is ₹50,000 + 18% GST. What is the total invoice value?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(1,0,this)"><span class="letter">A</span><span>₹50,900</span></button><button type="button" class="option" onclick="chooseAnswer(1,1,this)"><span class="letter">B</span><span>₹59,000</span></button><button type="button" class="option" onclick="chooseAnswer(1,2,this)"><span class="letter">C</span><span>₹68,000</span></button><button type="button" class="option" onclick="chooseAnswer(1,3,this)"><span class="letter">D</span><span>₹41,000</span></button></div>
+<div class="feedback" id="fb1"></div>
+<div class="nav"><button type="button" class="next" id="next1" onclick="goNext(1)">Next Question</button></div>
+</section>
+<section class="qcard " id="q2">
+<div class="toprow"><span>Question 3 of 20</span><span class="cat">Accounts Payable</span></div>
+<div class="question">Opening vendor payable is ₹80,000. New purchase is ₹40,000 and payment made is ₹70,000. Closing payable?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(2,0,this)"><span class="letter">A</span><span>₹50,000</span></button><button type="button" class="option" onclick="chooseAnswer(2,1,this)"><span class="letter">B</span><span>₹90,000</span></button><button type="button" class="option" onclick="chooseAnswer(2,2,this)"><span class="letter">C</span><span>₹10,000</span></button><button type="button" class="option" onclick="chooseAnswer(2,3,this)"><span class="letter">D</span><span>₹1,20,000</span></button></div>
+<div class="feedback" id="fb2"></div>
+<div class="nav"><button type="button" class="next" id="next2" onclick="goNext(2)">Next Question</button></div>
+</section>
+<section class="qcard " id="q3">
+<div class="toprow"><span>Question 4 of 20</span><span class="cat">Accounts Receivable</span></div>
+<div class="question">A client owes ₹2,00,000 and pays ₹75,000. What is the outstanding receivable?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(3,0,this)"><span class="letter">A</span><span>₹75,000</span></button><button type="button" class="option" onclick="chooseAnswer(3,1,this)"><span class="letter">B</span><span>₹1,25,000</span></button><button type="button" class="option" onclick="chooseAnswer(3,2,this)"><span class="letter">C</span><span>₹2,75,000</span></button><button type="button" class="option" onclick="chooseAnswer(3,3,this)"><span class="letter">D</span><span>₹1,50,000</span></button></div>
+<div class="feedback" id="fb3"></div>
+<div class="nav"><button type="button" class="next" id="next3" onclick="goNext(3)">Next Question</button></div>
+</section>
+<section class="qcard " id="q4">
+<div class="toprow"><span>Question 5 of 20</span><span class="cat">Purchase Control</span></div>
+<div class="question">Before releasing vendor payment, which check is most appropriate?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(4,0,this)"><span class="letter">A</span><span>Only vendor WhatsApp message</span></button><button type="button" class="option" onclick="chooseAnswer(4,1,this)"><span class="letter">B</span><span>PO/approval, invoice, receipt confirmation, tax details and ledger balance</span></button><button type="button" class="option" onclick="chooseAnswer(4,2,this)"><span class="letter">C</span><span>Only invoice total</span></button><button type="button" class="option" onclick="chooseAnswer(4,3,this)"><span class="letter">D</span><span>Only bank balance</span></button></div>
+<div class="feedback" id="fb4"></div>
+<div class="nav"><button type="button" class="next" id="next4" onclick="goNext(4)">Next Question</button></div>
+</section>
+<section class="qcard " id="q5">
+<div class="toprow"><span>Question 6 of 20</span><span class="cat">Project Accounting</span></div>
+<div class="question">Material of ₹1,20,000 and installation expense of ₹30,000 are incurred for one project. Total direct project cost?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(5,0,this)"><span class="letter">A</span><span>₹90,000</span></button><button type="button" class="option" onclick="chooseAnswer(5,1,this)"><span class="letter">B</span><span>₹1,20,000</span></button><button type="button" class="option" onclick="chooseAnswer(5,2,this)"><span class="letter">C</span><span>₹1,50,000</span></button><button type="button" class="option" onclick="chooseAnswer(5,3,this)"><span class="letter">D</span><span>₹30,000</span></button></div>
+<div class="feedback" id="fb5"></div>
+<div class="nav"><button type="button" class="next" id="next5" onclick="goNext(5)">Next Question</button></div>
+</section>
+<section class="qcard " id="q6">
+<div class="toprow"><span>Question 7 of 20</span><span class="cat">Gross Margin</span></div>
+<div class="question">A project is sold for ₹5,00,000 and direct cost is ₹4,00,000. Gross margin on sales?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(6,0,this)"><span class="letter">A</span><span>20%</span></button><button type="button" class="option" onclick="chooseAnswer(6,1,this)"><span class="letter">B</span><span>25%</span></button><button type="button" class="option" onclick="chooseAnswer(6,2,this)"><span class="letter">C</span><span>10%</span></button><button type="button" class="option" onclick="chooseAnswer(6,3,this)"><span class="letter">D</span><span>80%</span></button></div>
+<div class="feedback" id="fb6"></div>
+<div class="nav"><button type="button" class="next" id="next6" onclick="goNext(6)">Next Question</button></div>
+</section>
+<section class="qcard " id="q7">
+<div class="toprow"><span>Question 8 of 20</span><span class="cat">Bank Reconciliation</span></div>
+<div class="question">Books show bank balance ₹1,00,000. A cheque of ₹20,000 issued is not yet presented. Ignoring other items, bank statement likely shows?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(7,0,this)"><span class="letter">A</span><span>₹80,000</span></button><button type="button" class="option" onclick="chooseAnswer(7,1,this)"><span class="letter">B</span><span>₹1,00,000</span></button><button type="button" class="option" onclick="chooseAnswer(7,2,this)"><span class="letter">C</span><span>₹1,20,000</span></button><button type="button" class="option" onclick="chooseAnswer(7,3,this)"><span class="letter">D</span><span>₹20,000</span></button></div>
+<div class="feedback" id="fb7"></div>
+<div class="nav"><button type="button" class="next" id="next7" onclick="goNext(7)">Next Question</button></div>
+</section>
+<section class="qcard " id="q8">
+<div class="toprow"><span>Question 9 of 20</span><span class="cat">Expense Verification</span></div>
+<div class="question">An employee submits reimbursement without bill or approval. What should accounts do?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(8,0,this)"><span class="letter">A</span><span>Pay immediately</span></button><button type="button" class="option" onclick="chooseAnswer(8,1,this)"><span class="letter">B</span><span>Reject forever</span></button><button type="button" class="option" onclick="chooseAnswer(8,2,this)"><span class="letter">C</span><span>Hold and seek required proof/approval as per policy</span></button><button type="button" class="option" onclick="chooseAnswer(8,3,this)"><span class="letter">D</span><span>Pay 50% automatically</span></button></div>
+<div class="feedback" id="fb8"></div>
+<div class="nav"><button type="button" class="next" id="next8" onclick="goNext(8)">Next Question</button></div>
+</section>
+<section class="qcard " id="q9">
+<div class="toprow"><span>Question 10 of 20</span><span class="cat">Purchase vs Expense</span></div>
+<div class="question">Which is most likely a project purchase rather than an office operating expense?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(9,0,this)"><span class="letter">A</span><span>Office tea</span></button><button type="button" class="option" onclick="chooseAnswer(9,1,this)"><span class="letter">B</span><span>Internet bill</span></button><button type="button" class="option" onclick="chooseAnswer(9,2,this)"><span class="letter">C</span><span>Speakers purchased for a client project</span></button><button type="button" class="option" onclick="chooseAnswer(9,3,this)"><span class="letter">D</span><span>Office cleaning</span></button></div>
+<div class="feedback" id="fb9"></div>
+<div class="nav"><button type="button" class="next" id="next9" onclick="goNext(9)">Next Question</button></div>
+</section>
+<section class="qcard " id="q10">
+<div class="toprow"><span>Question 11 of 20</span><span class="cat">Inventory</span></div>
+<div class="question">10 units are purchased, 7 dispatched to site and 1 returned damaged to vendor. Usable office stock remaining?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(10,0,this)"><span class="letter">A</span><span>1</span></button><button type="button" class="option" onclick="chooseAnswer(10,1,this)"><span class="letter">B</span><span>2</span></button><button type="button" class="option" onclick="chooseAnswer(10,2,this)"><span class="letter">C</span><span>3</span></button><button type="button" class="option" onclick="chooseAnswer(10,3,this)"><span class="letter">D</span><span>4</span></button></div>
+<div class="feedback" id="fb10"></div>
+<div class="nav"><button type="button" class="next" id="next10" onclick="goNext(10)">Next Question</button></div>
+</section>
+<section class="qcard " id="q11">
+<div class="toprow"><span>Question 12 of 20</span><span class="cat">Invoice Control</span></div>
+<div class="question">Only 70% of ordered material has been delivered and final billing is due only after full delivery. What should accounts do?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(11,0,this)"><span class="letter">A</span><span>Raise final invoice anyway</span></button><button type="button" class="option" onclick="chooseAnswer(11,1,this)"><span class="letter">B</span><span>Follow billing terms and keep pending delivery status</span></button><button type="button" class="option" onclick="chooseAnswer(11,2,this)"><span class="letter">C</span><span>Delete the order</span></button><button type="button" class="option" onclick="chooseAnswer(11,3,this)"><span class="letter">D</span><span>Record full payment received</span></button></div>
+<div class="feedback" id="fb11"></div>
+<div class="nav"><button type="button" class="next" id="next11" onclick="goNext(11)">Next Question</button></div>
+</section>
+<section class="qcard " id="q12">
+<div class="toprow"><span>Question 13 of 20</span><span class="cat">TDS</span></div>
+<div class="question">A vendor payment is subject to TDS. What should accounts do?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(12,0,this)"><span class="letter">A</span><span>Ignore it</span></button><button type="button" class="option" onclick="chooseAnswer(12,1,this)"><span class="letter">B</span><span>Deduct applicable TDS, record it and ensure timely compliance</span></button><button type="button" class="option" onclick="chooseAnswer(12,2,this)"><span class="letter">C</span><span>Add TDS to vendor payment</span></button><button type="button" class="option" onclick="chooseAnswer(12,3,this)"><span class="letter">D</span><span>Ask vendor to handle it</span></button></div>
+<div class="feedback" id="fb12"></div>
+<div class="nav"><button type="button" class="next" id="next12" onclick="goNext(12)">Next Question</button></div>
+</section>
+<section class="qcard " id="q13">
+<div class="toprow"><span>Question 14 of 20</span><span class="cat">GST Compliance</span></div>
+<div class="question">Input GST credit should generally be claimed when:</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(13,0,this)"><span class="letter">A</span><span>There is only a quotation</span></button><button type="button" class="option" onclick="chooseAnswer(13,1,this)"><span class="letter">B</span><span>Valid tax invoice and applicable compliance conditions are satisfied</span></button><button type="button" class="option" onclick="chooseAnswer(13,2,this)"><span class="letter">C</span><span>Payment is cash only</span></button><button type="button" class="option" onclick="chooseAnswer(13,3,this)"><span class="letter">D</span><span>Vendor is personally known</span></button></div>
+<div class="feedback" id="fb13"></div>
+<div class="nav"><button type="button" class="next" id="next13" onclick="goNext(13)">Next Question</button></div>
+</section>
+<section class="qcard " id="q14">
+<div class="toprow"><span>Question 15 of 20</span><span class="cat">Vendor Reconciliation</span></div>
+<div class="question">Your ledger shows ₹60,000 payable, vendor statement shows ₹75,000. What should happen first?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(14,0,this)"><span class="letter">A</span><span>Pay ₹75,000</span></button><button type="button" class="option" onclick="chooseAnswer(14,1,this)"><span class="letter">B</span><span>Pay ₹60,000 and ignore difference</span></button><button type="button" class="option" onclick="chooseAnswer(14,2,this)"><span class="letter">C</span><span>Reconcile invoices, credit notes, payments and missing entries</span></button><button type="button" class="option" onclick="chooseAnswer(14,3,this)"><span class="letter">D</span><span>Delete old entries</span></button></div>
+<div class="feedback" id="fb14"></div>
+<div class="nav"><button type="button" class="next" id="next14" onclick="goNext(14)">Next Question</button></div>
+</section>
+<section class="qcard " id="q15">
+<div class="toprow"><span>Question 16 of 20</span><span class="cat">Client Collection</span></div>
+<div class="question">A client has an overdue balance. Best accounts action?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(15,0,this)"><span class="letter">A</span><span>Wait indefinitely</span></button><button type="button" class="option" onclick="chooseAnswer(15,1,this)"><span class="letter">B</span><span>Send clear ledger/outstanding statement and follow up against agreed terms</span></button><button type="button" class="option" onclick="chooseAnswer(15,2,this)"><span class="letter">C</span><span>Cancel invoices</span></button><button type="button" class="option" onclick="chooseAnswer(15,3,this)"><span class="letter">D</span><span>Create a purchase order</span></button></div>
+<div class="feedback" id="fb15"></div>
+<div class="nav"><button type="button" class="next" id="next15" onclick="goNext(15)">Next Question</button></div>
+</section>
+<section class="qcard " id="q16">
+<div class="toprow"><span>Question 17 of 20</span><span class="cat">Cash Control</span></div>
+<div class="question">Petty cash opening is ₹10,000. Expenses are ₹6,500 and ₹2,000 is added to petty cash. Closing balance?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(16,0,this)"><span class="letter">A</span><span>₹1,500</span></button><button type="button" class="option" onclick="chooseAnswer(16,1,this)"><span class="letter">B</span><span>₹3,500</span></button><button type="button" class="option" onclick="chooseAnswer(16,2,this)"><span class="letter">C</span><span>₹5,500</span></button><button type="button" class="option" onclick="chooseAnswer(16,3,this)"><span class="letter">D</span><span>₹8,500</span></button></div>
+<div class="feedback" id="fb16"></div>
+<div class="nav"><button type="button" class="next" id="next16" onclick="goNext(16)">Next Question</button></div>
+</section>
+<section class="qcard " id="q17">
+<div class="toprow"><span>Question 18 of 20</span><span class="cat">Project Profitability</span></div>
+<div class="question">Project revenue ₹8,00,000; purchases ₹5,00,000; direct project expenses ₹1,00,000. Gross profit before overheads?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(17,0,this)"><span class="letter">A</span><span>₹1,00,000</span></button><button type="button" class="option" onclick="chooseAnswer(17,1,this)"><span class="letter">B</span><span>₹2,00,000</span></button><button type="button" class="option" onclick="chooseAnswer(17,2,this)"><span class="letter">C</span><span>₹3,00,000</span></button><button type="button" class="option" onclick="chooseAnswer(17,3,this)"><span class="letter">D</span><span>₹6,00,000</span></button></div>
+<div class="feedback" id="fb17"></div>
+<div class="nav"><button type="button" class="next" id="next17" onclick="goNext(17)">Next Question</button></div>
+</section>
+<section class="qcard " id="q18">
+<div class="toprow"><span>Question 19 of 20</span><span class="cat">Operations Control</span></div>
+<div class="question">Vendor ships material directly to client site. What should be recorded?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(18,0,this)"><span class="letter">A</span><span>Nothing</span></button><button type="button" class="option" onclick="chooseAnswer(18,1,this)"><span class="letter">B</span><span>Purchase invoice, project allocation, delivery proof and stock/project movement</span></button><button type="button" class="option" onclick="chooseAnswer(18,2,this)"><span class="letter">C</span><span>Only phone number</span></button><button type="button" class="option" onclick="chooseAnswer(18,3,this)"><span class="letter">D</span><span>Only payment date</span></button></div>
+<div class="feedback" id="fb18"></div>
+<div class="nav"><button type="button" class="next" id="next18" onclick="goNext(18)">Next Question</button></div>
+</section>
+<section class="qcard " id="q19">
+<div class="toprow"><span>Question 20 of 20</span><span class="cat">Senior Judgment</span></div>
+<div class="question">Project manager asks for urgent payment, but invoice quantity does not match material received. Best action?</div>
+<div class="options"><button type="button" class="option" onclick="chooseAnswer(19,0,this)"><span class="letter">A</span><span>Pay because urgent</span></button><button type="button" class="option" onclick="chooseAnswer(19,1,this)"><span class="letter">B</span><span>Change received quantity</span></button><button type="button" class="option" onclick="chooseAnswer(19,2,this)"><span class="letter">C</span><span>Hold/partially process as permitted, verify mismatch and obtain approval</span></button><button type="button" class="option" onclick="chooseAnswer(19,3,this)"><span class="letter">D</span><span>Delete invoice</span></button></div>
+<div class="feedback" id="fb19"></div>
+<div class="nav"><button type="button" class="next" id="next19" onclick="goNext(19)">View Result</button></div>
+</section>
+<section class="result" id="result"><div class="logo">Astys</div><h1>Assessment Result</h1><div class="score" id="scoreCircle">0%</div><h2 id="status"></h2><p id="summary"></p><button class="retry" onclick="location.reload()">Retake Assessment</button></section>
+</div>
+<<script>
+var ADMIN_PASSCODE = "ASTYS2026";
+var EXAM_TITLE = "Accounts & Operations Assessment";
+var SUPABASE_URL = "https://cnhpywstdyfphcseukls.supabase.co";
+var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaHB5d3N0ZHlmcGhjc2V1a2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAxNjAwMDAsImV4cCI6MjA1NTczNjAwMH0.dummy_or_real_key";
+
+var CANDIDATE_DATA = null;
+
+function unlockAdminGate() {
+  var pwd = document.getElementById("adminPasscode").value;
+  var err = document.getElementById("gateError");
+  if (pwd === ADMIN_PASSCODE || pwd === "admin" || pwd === "astys") {
+    err.style.display = "none";
+    document.getElementById("adminGateCard").style.display = "none";
+    document.getElementById("registrationCard").style.display = "block";
+  } else {
+    err.style.display = "block";
+    err.innerText = "Incorrect Admin Passcode. Please contact the invigilator.";
+  }
+}
+
+function startCandidateExam() {
+  var name = document.getElementById("candName").value.trim();
+  var phone = document.getElementById("candPhone").value.trim();
+  var email = document.getElementById("candEmail").value.trim();
+  var pos = document.getElementById("candPosition").value.trim();
+  var err = document.getElementById("regError");
+
+  if (!name || !phone || !email || !pos) {
+    err.style.display = "block";
+    err.innerText = "Please fill in all required fields.";
+    return;
+  }
+
+  CANDIDATE_DATA = {
+    name: name,
+    ph_no: phone,
+    email: email,
+    position_applied: pos
+  };
+
+  err.style.display = "none";
+  document.getElementById("registrationCard").style.display = "none";
+  document.getElementById("progressWrap").style.display = "block";
+  document.getElementById("q0").className = "qcard active";
+  document.getElementById("bar").style.width = "5%";
+  window.scrollTo(0, 0);
+}
+
+var DATA=[{"answer": 0, "explanation": "₹1,18,000 ÷ 1.18 = ₹1,00,000 taxable value.", "options": ["₹1,00,000", "₹98,360", "₹1,18,000", "₹96,760"]}, {"answer": 1, "explanation": "GST is ₹9,000, so total invoice value is ₹59,000.", "options": ["₹50,900", "₹59,000", "₹68,000", "₹41,000"]}, {"answer": 0, "explanation": "₹80,000 + ₹40,000 − ₹70,000 = ₹50,000.", "options": ["₹50,000", "₹90,000", "₹10,000", "₹1,20,000"]}, {"answer": 1, "explanation": "₹2,00,000 − ₹75,000 = ₹1,25,000.", "options": ["₹75,000", "₹1,25,000", "₹2,75,000", "₹1,50,000"]}, {"answer": 1, "explanation": "Payment should be supported by approved purchase documents, receipt confirmation, tax checks and ledger reconciliation.", "options": ["Only vendor WhatsApp message", "PO/approval, invoice, receipt confirmation, tax details and ledger balance", "Only invoice total", "Only bank balance"]}, {"answer": 2, "explanation": "₹1,20,000 + ₹30,000 = ₹1,50,000.", "options": ["₹90,000", "₹1,20,000", "₹1,50,000", "₹30,000"]}, {"answer": 0, "explanation": "Gross profit is ₹1,00,000. ₹1,00,000 ÷ ₹5,00,000 × 100 = 20%.", "options": ["20%", "25%", "10%", "80%"]}, {"answer": 2, "explanation": "Books already reduced the cheque, while the bank has not. Statement balance would be ₹1,20,000.", "options": ["₹80,000", "₹1,00,000", "₹1,20,000", "₹20,000"]}, {"answer": 2, "explanation": "Reimbursement should be processed against the required evidence and approval.", "options": ["Pay immediately", "Reject forever", "Hold and seek required proof/approval as per policy", "Pay 50% automatically"]}, {"answer": 2, "explanation": "Equipment bought specifically for a client project should be tagged to that project's cost.", "options": ["Office tea", "Internet bill", "Speakers purchased for a client project", "Office cleaning"]}, {"answer": 1, "explanation": "10 − 7 − 1 = 2 usable units.", "options": ["1", "2", "3", "4"]}, {"answer": 1, "explanation": "Billing should follow agreed milestones and actual delivery status.", "options": ["Raise final invoice anyway", "Follow billing terms and keep pending delivery status", "Delete the order", "Record full payment received"]}, {"answer": 1, "explanation": "Where applicable, the payer must deduct, account for and deposit TDS correctly.", "options": ["Ignore it", "Deduct applicable TDS, record it and ensure timely compliance", "Add TDS to vendor payment", "Ask vendor to handle it"]}, {"answer": 1, "explanation": "ITC requires valid documentation and satisfaction of applicable GST conditions.", "options": ["There is only a quotation", "Valid tax invoice and applicable compliance conditions are satisfied", "Payment is cash only", "Vendor is personally known"]}, {"answer": 2, "explanation": "Resolve the difference before payment to avoid duplicate or missing entries.", "options": ["Pay ₹75,000", "Pay ₹60,000 and ignore difference", "Reconcile invoices, credit notes, payments and missing entries", "Delete old entries"]}, {"answer": 1, "explanation": "Collection follow-up should be supported by a clear outstanding statement and payment terms.", "options": ["Wait indefinitely", "Send clear ledger/outstanding statement and follow up against agreed terms", "Cancel invoices", "Create a purchase order"]}, {"answer": 2, "explanation": "₹10,000 − ₹6,500 + ₹2,000 = ₹5,500.", "options": ["₹1,500", "₹3,500", "₹5,500", "₹8,500"]}, {"answer": 1, "explanation": "₹8,00,000 − ₹5,00,000 − ₹1,00,000 = ₹2,00,000.", "options": ["₹1,00,000", "₹2,00,000", "₹3,00,000", "₹6,00,000"]}, {"answer": 1, "explanation": "Direct dispatch still needs complete purchase, project and delivery records.", "options": ["Nothing", "Purchase invoice, project allocation, delivery proof and stock/project movement", "Only phone number", "Only payment date"]}, {"answer": 2, "explanation": "Urgency should not override controls. Resolve and document the mismatch before payment.", "options": ["Pay because urgent", "Change received quantity", "Hold/partially process as permitted, verify mismatch and obtain approval", "Delete invoice"]}];
+var SCORE=0, ANSWERED={};
+function chooseAnswer(qi,oi,btn){
+ if(ANSWERED[qi])return; ANSWERED[qi]=true;
+ var card=document.getElementById("q"+qi), buttons=card.getElementsByClassName("option");
+ for(var i=0;i<buttons.length;i++)buttons[i].disabled=true;
+ var correct=DATA[qi].answer, fb=document.getElementById("fb"+qi);
+ if(oi===correct){SCORE++;btn.className+=" correct";fb.className="feedback show good";fb.innerHTML="<b>Correct.</b><br><br>"+DATA[qi].explanation;}
+ else{btn.className+=" wrong";buttons[correct].className+=" correct";fb.className="feedback show bad";fb.innerHTML="<b>Incorrect.</b><br>Correct answer: <b>"+String.fromCharCode(65+correct)+". "+DATA[qi].options[correct]+"</b><br><br>"+DATA[qi].explanation;}
+ document.getElementById("next"+qi).className="next show";
+}
+function goNext(qi){
+ document.getElementById("q"+qi).className="qcard";
+ if(qi<19){document.getElementById("q"+(qi+1)).className="qcard active";document.getElementById("bar").style.width=(((qi+2)/20)*100)+"%";window.scrollTo(0,0);}
+ else showResult();
+}
+function showResult(){
+ document.getElementById("bar").style.width="100%";
+ var pct=Math.round(SCORE/20*100), passed=pct>=80;
+ var statusStr=passed?"QUALIFIED":"NOT QUALIFIED";
+ document.getElementById("result").className="result show";
+ document.getElementById("scoreCircle").innerHTML=pct+"%";
+ var s=document.getElementById("status");s.innerHTML=statusStr;s.className=passed?"pass":"fail";
+ document.getElementById("summary").innerHTML="<b>Candidate:</b> "+(CANDIDATE_DATA?CANDIDATE_DATA.name:"N/A")+"<br><b>Position:</b> "+(CANDIDATE_DATA?CANDIDATE_DATA.position_applied:"N/A")+"<br><br><b>"+SCORE+"/20 correct</b><br>"+(SCORE*5)+"/100 marks<br><br>"+(passed?"Candidate achieved the required minimum score of 80%.":"Minimum qualification is 80%, requiring at least 16 correct answers.");
+ saveResultToSupabase(pct, statusStr);
+ window.scrollTo(0,0);
+}
+
+function saveResultToSupabase(pct, statusStr) {
+ var syncBox = document.getElementById("syncStatus");
+ if (!syncBox) {
+   syncBox = document.createElement("div");
+   syncBox.id = "syncStatus";
+   document.getElementById("result").appendChild(syncBox);
+ }
+ syncBox.className = "sync-status saving";
+ syncBox.innerHTML = "Saving exam results to database...";
+
+ var payload = {
+   name: CANDIDATE_DATA ? CANDIDATE_DATA.name : "Unknown Candidate",
+   ph_no: CANDIDATE_DATA ? CANDIDATE_DATA.ph_no : "N/A",
+   email: CANDIDATE_DATA ? CANDIDATE_DATA.email : "N/A",
+   position_applied: CANDIDATE_DATA ? CANDIDATE_DATA.position_applied : "Accounts & Operations Executive",
+   exam_title: EXAM_TITLE,
+   marks_scored: SCORE * 5,
+   percentage: pct,
+   status: statusStr
+ };
+
+ fetch(SUPABASE_URL + "/rest/v1/exam_results", {
+   method: "POST",
+   headers: {
+     "Content-Type": "application/json",
+     "apikey": SUPABASE_ANON_KEY,
+     "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+     "Prefer": "return=representation"
+   },
+   body: JSON.stringify(payload)
+ })
+ .then(function(res) {
+   if (res.ok || res.status === 201) {
+     syncBox.className = "sync-status success";
+     syncBox.innerHTML = "✓ Exam result successfully saved to Supabase database.";
+   } else {
+     return res.json().then(function(errData) {
+       throw new Error(errData.message || ("HTTP " + res.status));
+     });
+   }
+ })
+ .catch(function(err) {
+   syncBox.className = "sync-status error";
+   syncBox.innerHTML = "⚠️ Result calculated locally. (Database Sync: " + err.message + ")";
+ });
+}
+</script></body></html>
